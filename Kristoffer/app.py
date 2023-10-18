@@ -1,17 +1,17 @@
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
 
-avgmonthlytemp = pd.read_csv("../projectwork/data/avg_monthly_temp_curated.csv")
+monthly = pd.read_pickle("../Dataframes/df_monthly_temp.pkl")
 
-testplot = plt.plot(avgmonthlytemp['Month'], avgmonthlytemp['Snittemperatur'])
-plt.xlabel('År')
+sns.scatterplot(x=monthly['Month'], y=monthly['Monthly avg'], data=monthly)
+sns.lineplot(x='Month', y= 'Monthly avg', data=monthly, errorbar=('ci', 0))
+plt.xlabel('Månad')
 plt.ylabel('Temperatur i °C')
-plt.xlim(left=0, right=84)
-plt.xticks(ticks=[0, 12, 24, 36, 48, 60, 72, 84], labels=["'61", "'62", "'63","'64","'65","'66","'67", "'68"])
+plt.xticks(ticks=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 
+           labels=['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'])
 testplot = plt.savefig('testplot')
 
 # >>> fig, ax = plt.subplots()
@@ -51,7 +51,7 @@ if nav == 'Data & Modellering':
     st.subheader('Rådata')
     st.write('För att ta del av rådatan till snittemperaturen per månad klicka i boxen')
     if st.checkbox('Visa rådata'):
-        st.write(avgmonthlytemp)
+        st.write(monthly)
 
 if nav == 'Förutsägelser om framtiden':
     st.header('Temperatur:')
