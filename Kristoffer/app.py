@@ -40,10 +40,10 @@ if nav == 'Data & Modellering':
     st.write('I denna sektionen kommer vi att presentera data tillsammans med våra slutsatser och observationer.')
 
     st.header('Grafisk presentation av insamlad data')
-    st.subheader('Månatlig snittemperatur från 1961 till 1968')
+    st.subheader('Månatlig snittemperatur')
     st.set_option('deprecation.showPyplotGlobalUse', False) # Döljer felmeddelandet från st.pyplot
     st.pyplot(testplot)
-    st.write("""Vi ser klart och tydligt att snittemperaturen under 7 år är för lite information för att göra någonting med.
+    st.write("""Vi ser här medelvärdet av temperaturen per månad.
             \nKommer mer data att visa någonting annat?""")
     st.write(' ')
 
