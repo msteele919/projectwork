@@ -28,9 +28,9 @@ class WeatherDatabase:
         con.close()
         return data
     
-db = WeatherDatabase('./WeatherGBG.db')
+db = WeatherDatabase('../Database/WeatherGBG.db')
     
-conn = sqlite3.connect('./WeatherGBG.db')
+conn = sqlite3.connect('../Database/WeatherGBG.db')
 
 
 df_warmer_union = pd.read_sql("""WITH Temp_comp AS (
