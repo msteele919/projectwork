@@ -5,7 +5,7 @@ import seaborn as sns
 import streamlit as st
 import os 
 
-monthly = pd.read_pickle("../Dataframes/df_monthly_temp.pkl")
+monthly = pd.read_pickle("/Users/mstee/Documents/School/projectwork/Dataframes/df_monthly_temp.pkl")
 
 # sns.scatterplot(x=monthly['Month'], y=monthly['Monthly avg'], data=monthly)
 # sns.lineplot(x='Month', y= 'Monthly avg', data=monthly, errorbar=('ci', 0))
@@ -13,21 +13,21 @@ monthly = pd.read_pickle("../Dataframes/df_monthly_temp.pkl")
 # plt.ylabel('Temperatur i °C')
 # plt.xticks(ticks=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 
 #            labels=['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'])
-testplot = ('testplot.png')
-julitempovertid = ('julitempovertid.png')
-decembertempovertid = ('decembertempovertid.png')
+testplot = ('../plottar/testplot.png')
+julitempovertid = ('../plottar/julitempovertid.png')
+decembertempovertid = ('../plottar/decembertempovertid.png')
 
 
 ## Förutsägelser om framtiden slides plottar 
 
 # train_test split 
-train_test_path = os.path.join("../brainstorming/temp_prediktion/train_test.png")
+train_test_path = os.path.join("../plottar/train_test.png")
 image = plt.imread(train_test_path)
 # prediktion bad 
-prediktion = os.path.join("../brainstorming/temp_prediktion/prediktion_bad.png")
+prediktion = os.path.join("../plottar/prediktion_bad.png")
 pred_bad = plt.imread(prediktion)
 #grid_search
-grid = os.path.join("../brainstorming/temp_prediktion/grid_search.png")
+grid = os.path.join("../plottar/grid_search.png")
 grid_s = plt.imread(grid)
 
 juli = monthly.query("Month == 7")
