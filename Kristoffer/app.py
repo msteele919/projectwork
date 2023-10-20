@@ -7,31 +7,32 @@ import os
 
 monthly = pd.read_pickle("../Dataframes/df_monthly_temp.pkl")
 
-sns.scatterplot(x=monthly['Month'], y=monthly['Monthly avg'], data=monthly)
-sns.lineplot(x='Month', y= 'Monthly avg', data=monthly, errorbar=('ci', 0))
-plt.xlabel('Månad')
-plt.ylabel('Temperatur i °C')
-plt.xticks(ticks=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 
-           labels=['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'])
-testplot = plt.savefig('testplot')
+# sns.scatterplot(x=monthly['Month'], y=monthly['Monthly avg'], data=monthly)
+# sns.lineplot(x='Month', y= 'Monthly avg', data=monthly, errorbar=('ci', 0))
+# plt.xlabel('Månad')
+# plt.ylabel('Temperatur i °C')
+# plt.xticks(ticks=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 
+#            labels=['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'])
+testplot = ('testplot.png')
+julitempovertid = ('julitempovertid.png')
+decembertempovertid = ('decembertempovertid.png')
+
 
 ## Förutsägelser om framtiden slides plottar 
 
 # train_test split 
-train_test_path = os.path.join("brainstorming/temp_prediktion", "train_test.png")
+train_test_path = os.path.join("../brainstorming/temp_prediktion/train_test.png")
 image = plt.imread(train_test_path)
 # prediktion bad 
-prediktion = os.path.join("brainstorming/temp_prediktion", "prediktion_bad.png")
+prediktion = os.path.join("../brainstorming/temp_prediktion/prediktion_bad.png")
 pred_bad = plt.imread(prediktion)
 #grid_search
-grid = os.path.join("brainstorming/temp_prediktion", "grid_search.png")
+grid = os.path.join("../brainstorming/temp_prediktion/grid_search.png")
 grid_s = plt.imread(grid)
 
+juli = monthly.query("Month == 7")
+december = monthly.query("Month == 12")
 
-# >>> fig, ax = plt.subplots()
-# >>> ax.scatter([1, 2, 3], [1, 2, 3])
-# >>>    ... other plotting actions ...
-# >>> st.pyplot(fig)
 
 
 
@@ -55,13 +56,17 @@ if nav == 'Data & Modellering':
     st.write('I denna sektionen kommer vi att presentera data tillsammans med våra slutsatser och observationer.')
 
     st.header('Grafisk presentation av insamlad data')
-    st.subheader('Månatlig snittemperatur')
+    st.subheader('Månatlig snittemperatur mellan perioden Januari 1944 till Oktober 2023.')
     st.set_option('deprecation.showPyplotGlobalUse', False) # Döljer felmeddelandet från st.pyplot
-    st.pyplot(testplot)
-    st.write("""Vi ser här medelvärdet av temperaturen per månad.
-            \nKommer mer data att visa någonting annat?""")
+    st.image(testplot)
+    st.write("""Vi ser här medelvärdet av temperaturen per månad. Hur ser exempelvis Juli ut? """)
+    st.write(f"Minsta uppmätta värde: {juli['Monthly avg'].min()} °C")
+    st.write(f"Högsta uppmätta värde: {juli['Monthly avg'].max()} °C")
+    st.write(f"Snittemperatur för juli sedan 1944: {round(juli['Monthly avg'].mean(),2)} °C")
+    st.image(julitempovertid)
+    st.write('Vi kan se på trendlinjen här att medeltemperaturen för Juli månad blir varmare med tiden. Är det detsamma för exempelvis December?')
+    st.image(decembertempovertid)
     st.write(' ')
-
 
     st.subheader('Rådata')
     st.write('För att ta del av rådatan till snittemperaturen per månad klicka i boxen')
