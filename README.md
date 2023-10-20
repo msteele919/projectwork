@@ -9,11 +9,12 @@ Visualiseringar: 2st ~ före och efter ett ord för att ~~stryka över~~
 
 ~~Årsmedeltemperatur~~
 
+Nederbörd över tid
+
 Snödjup över tid
 
 Antal dagar med stormvind (24,5 - 28,4 mp/s)
 Antal dagar med svår storm (28,5 - 32,6 mp/s)
 Antal dagar med orkanvindar(32,6 mp/s +)
-Nederbörd över tid
 Sommartemperatur över tid
 Vintertemperatur över tid
