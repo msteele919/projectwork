@@ -32,6 +32,7 @@ db = WeatherDatabase('../Database/WeatherGBG.db')
     
 conn = sqlite3.connect('../Database/WeatherGBG.db')
 
+# Queery
 
 df_warmer_union = pd.read_sql("""WITH Temp_comp AS (
                         SELECT *, LAG(Avg_daily_temp) OVER (ORDER BY Datum_date) AS Prev_temp
@@ -51,6 +52,7 @@ df_warmer_union = pd.read_sql("""WITH Temp_comp AS (
                         FROM Temp_comp;
                         """, conn, parse_dates=['Datum_date']).drop(columns=['Tid_UTC', 'id']).drop(columns=['Prev_temp'])
 
+# Create column to see when summer has arrived
 
 df_warmer_union['Över_10_grader_i_5_dagar'] = 0
 counter = 0
@@ -63,16 +65,44 @@ for ind, val in df_warmer_union[1:].iterrows():
     if counter >= 5:
         df_warmer_union.loc[ind, 'Över_10_grader_i_5_dagar'] = 1
     else:
-        df_warmer_union.loc[ind, 'Steg_tempern?'] = 0
+        pass
 
 
-df_warmer_union = df_warmer_union.drop(columns=['Warmer', 'Steg_tempern?'])
+df_warmer_union = df_warmer_union.drop(columns=['Warmer'])
 
 def get_first_summer_day_per_year(year):
     for ind, val in df_warmer_union[df_warmer_union['Datum_date'].dt.year == year].iterrows():
         if df_warmer_union['Över_10_grader_i_5_dagar'][ind] == 1:
             first_summer_day = df_warmer_union['Datum_date'][ind-4].strftime('%Y-%m-%d')
+            return first_summer_day
             break
         else:
             pass
-    return first_summer_day
+    return None
+
+
+# Create column to see when winter has arrived
+
+df_warmer_union['Under_0_grader_i_5_dagar'] = 0
+counter = 0
+for ind, val in df_warmer_union[1:].iterrows():
+    temp_prev = df_warmer_union[ind-1:ind]['Avg_daily_temp'][ind-1]
+    if val['Avg_daily_temp'] <= 0:
+        counter += 1
+    else:
+        counter = 0
+    if counter >= 5:
+        df_warmer_union.loc[ind, 'Under_0_grader_i_5_dagar'] = 1
+    else:
+        pass
+
+def get_first_winter_day_per_year(year):
+    for ind, val in df_warmer_union[(df_warmer_union['Datum_date'].dt.year == year) & (df_warmer_union['Datum_date'].dt.month > 6)].iterrows():
+        if df_warmer_union['Under_0_grader_i_5_dagar'][ind] == 1:
+            first_winter_day = df_warmer_union['Datum_date'][ind-4].strftime('%Y-%m-%d')
+            return first_winter_day
+            break
+        else:
+            pass
+
+    return None
