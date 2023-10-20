@@ -13,9 +13,13 @@ monthly = pd.read_pickle("../Dataframes/df_monthly_temp.pkl")
 # plt.ylabel('Temperatur i °C')
 # plt.xticks(ticks=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], 
 #            labels=['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'])
-testplot = ('../plottar/testplot.png')
+manadtempovertid = ('../plottar/manadtempovertid.png')
 julitempovertid = ('../plottar/julitempovertid.png')
 decembertempovertid = ('../plottar/decembertempovertid.png')
+regnpermanad = ('../plottar/regnpermanad.png')
+oktoberregn = ('../plottar/oktoberregn.png')
+aprilregn = ('../plottar/aprilregn.png')
+regnperar = ('../plottar/regnperår.png')
 
 
 ## Förutsägelser om framtiden slides plottar 
@@ -39,7 +43,7 @@ december = monthly.query("Month == 12")
 # Creating the menu
 nav = st.sidebar.radio('Meny',['Syfte', 'Data & Modellering', 'Förutsägelser om framtiden', 'Slutsats och reflektioner'])
 if nav == 'Syfte':
-    st.title('Undersökning av väderdata kring Göteborgsområdet från 1961 till 2023')
+    st.title('Undersökning av väderdata kring Göteborgsområdet från 1944 till 2023')
     st.header('Syftet med valt projekt:')
     st.write("""1. Kan man med hjälp av historisk väderdata se trender kring förändringar i vädret?
              \n2. Har regn blivit mer intensivt under de senaste 50 åren?
@@ -58,7 +62,7 @@ if nav == 'Data & Modellering':
     st.header('Grafisk presentation av insamlad data')
     st.subheader('Månatlig snittemperatur mellan perioden Januari 1944 till Oktober 2023.')
     st.set_option('deprecation.showPyplotGlobalUse', False) # Döljer felmeddelandet från st.pyplot
-    st.image(testplot)
+    st.image(manadtempovertid)
     st.write("""Vi ser här medelvärdet av temperaturen per månad. Hur ser exempelvis Juli ut? """)
     st.write(f"Minsta uppmätta värde: {juli['Monthly avg'].min()} °C")
     st.write(f"Högsta uppmätta värde: {juli['Monthly avg'].max()} °C")
@@ -66,6 +70,22 @@ if nav == 'Data & Modellering':
     st.image(julitempovertid)
     st.write('Vi kan se på trendlinjen här att medeltemperaturen för Juli månad blir varmare med tiden. Är det detsamma för exempelvis December?')
     st.image(decembertempovertid)
+    st.write(f"Minsta uppmätta värde: {december['Monthly avg'].min()} °C")
+    st.write(f"Högsta uppmätta värde: {december['Monthly avg'].max()} °C")
+    st.write(f"Snittemperatur för juli sedan 1944: {round(december['Monthly avg'].mean(),2)} °C")
+    st.subheader('Hur ser det ut med nederbörd?')
+    st.write('Så här ser fördelningen av nederbörd ut per år')
+    st.image(regnpermanad)
+    st.write('Vi ser här att den regnigaste perioden är Oktober månad och den minst regniga perioden är April')
+    st.write('Har oktober månad blivit blötare över tid?')
+    st.image(oktoberregn)
+    st.write('Det ser ut som att den blöta perioden Oktober blir blötare med tiden. Är det likadant med den minst regniga månaden?')
+    st.image(aprilregn)
+    st.write('Ja, det ser onekligen ut så baserat på denna datan med. Inte i samma takt men ändå blötare med tiden.')
+    st.write('Om vi ställer hela året över tid, hur ser det ut då?')
+    st.image(regnperar)
+    st.write('')
+
     st.write(' ')
 
     st.subheader('Rådata')
