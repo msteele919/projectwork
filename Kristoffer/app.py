@@ -5,7 +5,7 @@ import seaborn as sns
 import streamlit as st
 import os 
 
-monthly = pd.read_pickle("/Users/mstee/Documents/School/projectwork/Dataframes/df_monthly_temp.pkl")
+monthly = pd.read_pickle("../Dataframes/df_monthly_temp.pkl")
 
 # sns.scatterplot(x=monthly['Month'], y=monthly['Monthly avg'], data=monthly)
 # sns.lineplot(x='Month', y= 'Monthly avg', data=monthly, errorbar=('ci', 0))
