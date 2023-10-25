@@ -9,8 +9,9 @@ Visualiseringar: 2st ~ före och efter ett ord för att ~~stryka över~~
 
 ~~Årsmedeltemperatur~~
 
-~~Nederbörd över tid~~
-
+Nederbörd över tid
+    - Har antalet dagar som överstiger X antal mm nederbörd ökat?
+    
 Snödjup över tid
 
 Antal dagar med stormvind (24,5 - 28,4 mp/s)
