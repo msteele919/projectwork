@@ -11,7 +11,7 @@ Visualiseringar: 2st ~ före och efter ett ord för att ~~stryka över~~
 
 Nederbörd över tid
     - Har antalet dagar som överstiger X antal mm nederbörd ökat?
-    Lätt regn: <=0,5mm / h
+    Lätt regn: <0,5mm / h
     Måttligt regn: 0,5 - 4mm / h
     Kraftigt regn: >4mm / h 
 
