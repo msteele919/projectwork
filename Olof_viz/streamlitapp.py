@@ -2,9 +2,9 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 
-juli_temp = ('../plottar/julitempovertid.png')
+# juli_temp = ('../plottar/julitempovertid.png')
 
-nav = st.sidebar.radio('Huvudmeny', ['Syfte', 'EDA', 'Locations', 'Nederbörd', 'Vind', 'Temperatur'])
+nav = st.sidebar.radio('Huvudmeny', ['Syfte', 'EDA', 'Locations', 'Nederbörd', 'Vind', 'Temperatur', 'Sommarens och vinterns ankomst'])
 
 if nav == 'Syfte':
 
@@ -12,7 +12,7 @@ if nav == 'Syfte':
     st.text('Vi vill klara skolan och få jobb och tjäna fett med casshhhhh!!!!')
 
 if nav == 'EDA':
-
+    # st.session_state
     st.title('Lol, fat chance')
     st.text('Choose plot to see:')
     df = pd.read_pickle('../dataframes/df_compiled_monthly_temp_gbg_save.pkl')
@@ -21,22 +21,24 @@ if nav == 'EDA':
     
     col1, col2, col3 = st.columns(3)
 
-    res_january = col1.button('January temp')
-    res_february = col1.button('Febuary temp')
-    res_march = col1.button('March temp')
-    res_april = col1.button('April temp')
-    res_may = col2.button('May temp')
-    res_june = col2.button('June temp')
-    res_july = col2.button('Junly temp')
-    res_august = col2.button('August temp')
-    res_september = col3.button('September temp')
-    res_october = col3.button('October temp')
-    res_november = col3.button('November temp')
-    res_december = col3.button('December temp')    
+    res_January = col1.button('January temp')
+    res_February = col1.button('Febuary temp')
+    res_March = col1.button('March temp')
+    res_April = col1.button('April temp')
+    res_May = col2.button('May temp')
+    res_June = col2.button('June temp')
+    res_July = col2.button('July temp')
+    res_August = col2.button('August temp')
+    res_September = col3.button('September temp')
+    res_October = col3.button('October temp')
+    res_November = col3.button('November temp')
+    res_December = col3.button('December temp')    
 
-    month_list = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
-    res_list = [res_january, res_february, res_march, res_april, res_may, res_june, res_july, res_august, res_september, res_october, res_november, res_december]
-    res_list_str = ['res_january', 'res_february', 'res_march', 'res_april', 'res_may', 'res_june', 'res_july', 'res_august', 'res_september', 'res_october', 'res_november', 'res_december']
+    month_list = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    res_list = [res_January, res_February, res_March, res_April, res_May, res_June, res_July, res_August, res_September, res_October, res_November, res_December]
+    res_list_str = ['res_January', 'res_February', 'res_March', 'res_April', 'res_May', 'res_June', 'res_July', 'res_August', 'res_September', 'res_October', 'res_November', 'res_December']
+
+    
 
     for ind, val in enumerate(res_list):
         if val == True:
@@ -56,22 +58,25 @@ if nav == 'EDA':
     start = st.session_state.desired_start
     end = st.session_state.desired_end
 
-    df = df[(df['Year'] >= start) & (df['Year'] <= end)]
-    for ind, val in enumerate(res_list_str):
-        if val == button:
-            month = ind
+    if st.session_state.last_button == None:
+        pass
+    else:
+        df = df[(df['Year'] >= start) & (df['Year'] <= end)]
+        for ind, val in enumerate(res_list_str):
+            if val == button:
+                month = ind
 
-    df = df[df['Month'] == month+1]
-    fig, ax = plt.subplots()
-    ax.scatter(x=df['Year'], y=df['Snittemperatur'])
-    ax.set_title(f'Temperatures in {month_list[month]}')
-    ax.set_xlabel('Year')
-    ax.set_ylabel('Average daily temperature, Celcius')
-    st.pyplot(fig)
+        df = df[df['Month'] == month+1]
+        fig, ax = plt.subplots()
+        ax.scatter(x=df['Year'], y=df['Snittemperatur'])
+        ax.set_title(f'Temperatures in {month_list[month]}')
+        ax.set_xlabel('Year')
+        ax.set_ylabel('Average daily temperature, Celcius')
+        st.pyplot(fig)
 
 
 if nav == 'Locations':
-    st.title('Locations')
+    st.title('Locations in Göteborg')
     st.text("The station in Gothenburg has changed locations throught the years. \nSince 1998 it's located by Gullbergsvass")
     df = pd.DataFrame(pd.read_csv('../data/station_info.csv'))
     df = df.rename(columns={'Latitud (decimalgrader)': 'LAT', 'Longitud (decimalgrader)': 'LON'})
@@ -85,3 +90,32 @@ if nav == 'Locations':
             df.at[ind, 'Colour'] = red_hex
 
     st.map(df, color='Colour')
+
+    st.title('Säve')
+    st.write('Säve is located on Hisingen, about 10km from Göteborg. This station has not changed place.')
+    save_long = '11.8824'
+    save_lat = '57.7786'
+    df_save = pd.DataFrame({'LON': [float(save_long)], 'LAT': [float(save_lat)]})
+    st.map(df_save, latitude='LAT', longitude='LON', zoom=9, size=1000)
+
+if nav == 'Nederbörd':
+    st.write('Nä')
+
+if nav == 'Vind':
+     st.write('Nä')
+
+if nav == 'Temperatur':
+    temp_comp = ('temp_adjusted_comparison.png')
+    st.image(temp_comp, width=1000)
+
+if nav == 'Sommarens och vinterns ankomst':
+    st.title('Sommarens och vinterns ankomst')
+    st.write('"Den meteorologiska definitionen av sommar är att dygnsmedeltemperaturen varaktigt ska vara minst 10,0°C." /SMHI')
+    st.write('"Meteorologer definierar vinter som den period då dygnets medeltemperatur varaktigt är 0,0 grader eller lägre." /SMHI')
+    '\n'
+    '\n'
+    '\n'
+    '\n'
+    st.title('Sommarens anskomst')
+    summer_arrival = ('summer_arrival_adjusted_comp.png')
+    st.image(summer_arrival, width=1000)
