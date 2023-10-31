@@ -41,8 +41,8 @@ december = monthly.query("Month == 12")
 
 
 # Creating the menu
-nav = st.sidebar.radio('Meny',['Syfte', 'Data & Modellering', 'Förutsägelser om framtiden', 'Slutsats och reflektioner'])
-if nav == 'Syfte':
+nav = st.sidebar.radio('Meny',['Syfte och frågeställning', 'Temperatur', 'Nederbörd', 'Förutsägelser om framtiden', 'Slutsats och reflektioner'])
+if nav == 'Syfte och frågeställning':
     st.title('Undersökning av väderdata kring Göteborgsområdet från 1944 till 2023')
     st.header('Syftet med valt projekt:')
     st.write("""1. Kan man med hjälp av historisk väderdata se trender kring förändringar i vädret?
@@ -52,12 +52,12 @@ if nav == 'Syfte':
              \n5. Kan vi förutspå hur vädret ser ut i till exempel Juli 2028? 
              """)
 
-    st.write('Funkar det?')
+    st.write('')
 
-if nav == 'Data & Modellering':
+if nav == 'Temperatur':
     
-    st.title('Data & Modellering')
-    st.write('I denna sektionen kommer vi att presentera data tillsammans med våra slutsatser och observationer.')
+    st.title('Temperatur')
+    st.write('I denna sektionen kommer vi att presentera data tillsammans med vår frågeställning kring .')
 
     st.header('Grafisk presentation av insamlad data')
     st.subheader('Månatlig snittemperatur mellan perioden Januari 1944 till Oktober 2023.')
@@ -73,6 +73,16 @@ if nav == 'Data & Modellering':
     st.write(f"Minsta uppmätta värde: {december['Monthly avg'].min()} °C")
     st.write(f"Högsta uppmätta värde: {december['Monthly avg'].max()} °C")
     st.write(f"Snittemperatur för juli sedan 1944: {round(december['Monthly avg'].mean(),2)} °C")
+    
+
+    st.write(' ')
+
+    st.subheader('Rådata')
+    st.write('För att ta del av rådatan till snittemperaturen per månad klicka i boxen')
+    if st.checkbox('Visa rådata'):
+        st.write(monthly)
+
+if nav == 'Nederbörd':
     st.subheader('Hur ser det ut med nederbörd?')
     st.write('Så här ser fördelningen av nederbörd ut per år')
     st.image(regnpermanad)
@@ -85,13 +95,6 @@ if nav == 'Data & Modellering':
     st.write('Om vi ställer hela året över tid, hur ser det ut då?')
     st.image(regnperar)
     st.write('')
-
-    st.write(' ')
-
-    st.subheader('Rådata')
-    st.write('För att ta del av rådatan till snittemperaturen per månad klicka i boxen')
-    if st.checkbox('Visa rådata'):
-        st.write(monthly)
 
 if nav == 'Förutsägelser om framtiden':
     st.title('Förutsägelser om framtids snitt temperatur')
