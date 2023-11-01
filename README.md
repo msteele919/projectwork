@@ -11,6 +11,7 @@ Visualiseringar: 2st ~ före och efter ett ord för att ~~stryka över~~
 
 Nederbörd över tid
     - Har antalet dagar som överstiger X antal mm nederbörd ökat?
+    - Vilka månader ökar/minskar regnet mest?
     
 Snödjup över tid
 
