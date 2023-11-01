@@ -11,6 +11,7 @@ Visualiseringar: 2st ~ före och efter ett ord för att ~~stryka över~~
 
 Nederbörd över tid
     - Har antalet dagar som överstiger X antal mm nederbörd ökat?
+<<<<<<< HEAD
     Lätt regn: <0,5mm / h
     Måttligt regn: 0,5 - 4mm / h
     Kraftigt regn: >4mm / h 
@@ -34,6 +35,11 @@ Antal dagar med snö djupare än:
 ~~Antal dagar med svår storm (28,5 - 32,6 mp/s)~~
 
 ~~Antal dagar med orkanvindar(32,6 mp/s +)~~
+=======
+    - Vilka månader ökar/minskar regnet mest?
+    
+Snödjup över tid
+>>>>>>> olof_dev
 
 Sommartemperatur över tid
 
