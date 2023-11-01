@@ -34,6 +34,9 @@ Antal dagar med snö djupare än:
 ~~Antal dagar med svår storm (28,5 - 32,6 mp/s)~~
 
 ~~Antal dagar med orkanvindar(32,6 mp/s +)~~
+    - Vilka månader ökar/minskar regnet mest?
+    
+Snödjup över tid
 
 Sommartemperatur över tid
 
