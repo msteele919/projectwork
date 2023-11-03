@@ -113,7 +113,23 @@ if nav == 'Nederbörd':
     st.write('Nä')
 
 if nav == 'Vind':
-     st.write('Nä')
+    st.title('Överblick över wind data ')
+    st.write("""Som i de andra exempel har vi konkatenerat Säve och Göteborgs data för att kunna ha data från 1944 till 2023. Med knapparna nedan kan man skrolla igenom 
+             """)
+    # knappar där man kan kolla på till exempel Säve data, Göteborgs data 
+        # Meta knappar: välj mellan säve, Göteborg, Säve & Göteborg
+    vind_1 = "../plottar/mean_wind_daily_gbg.png"
+    vind_2 = "../plottar/mean_wind_daily_sv.png"
+    vind_3 = "../plottar/mean_wind_daily_sv_gt.png"
+    compare_visuals = [ vind_1, vind_2, vind_3]
+
+    visual_names = ["GBG Snittvindhastighet p/dag", "Säve Snittvindhastighet p/dag", "GBG, Säve sammanlagt, Snittvindhastighet p/dag"]
+    # Display the current visual based on a user-selected name
+    current_index = st.selectbox("Select Visual", visual_names, index=0)
+    visual_index = visual_names.index(current_index)  # Get the index of the selected name
+    st.image(compare_visuals[visual_index], caption=current_index)
+    
+   
 
 if nav == 'Temperatur':
     temp_comp = ('temp_adjusted_comparison.png')
