@@ -1,20 +1,29 @@
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 # juli_temp = ('../plottar/julitempovertid.png')
 
-nav = st.sidebar.radio('Huvudmeny', ['Syfte', 'EDA', 'Locations', 'Nederbörd', 'Vind', 'Temperatur', 'Sommarens och vinterns ankomst'])
+nav = st.sidebar.radio('Huvudmeny', ['Bakgrund', 'Frågeställning' 'EDA', 'Platser', 'Nederbörd', 'Vind', 'Temperatur', 'Sommarens och vinterns ankomst'])
 
-if nav == 'Syfte':
+if nav == 'Bakgrund':
 
     st.title('Jasså, det vill du allt bra veta va?')
-    st.text('Vi vill klara skolan och få jobb och tjäna fett med casshhhhh!!!!')
+    st.text('''1. Kan man med hjälp av historisk väderdata se trender kring förändringar i vädret?
+            
+            \nHur har temperaturen ändrats sedan första datan?
+            \nHar regn blivit mer intensivt under de senaste 50 åren? (Definiera intensivt)
+	        \nFlera dagar med regn? Har totala nederbörden ökat/minskat mellan åren?
+            \nHar åskoväder och stormar blivit mer intensiva under de senaste 50 åren? - sekundär
+            \nHur har snödjupet ändrats över tid? 
+            \nKan vi förutspå hur vädret ser ut i till exempel juli 2028?''')
+
 
 if nav == 'EDA':
     # st.session_state
     st.title('Lol, fat chance')
-    st.text('Choose plot to see:')
+    st.text('Välj månad att se:')
     df = pd.read_pickle('../dataframes/df_compiled_monthly_temp_gbg_save.pkl')
     first_year = df['Year'].min()
     last_year = df['Year'].max()
@@ -47,7 +56,7 @@ if nav == 'EDA':
         elif 'last_button' not in st.session_state:
             st.session_state.last_button = None
 
-    desired_start, desired_end = st.slider('Select timeframe (optional):', min_value=first_year, max_value=last_year, value=[first_year, last_year])
+    desired_start, desired_end = st.slider('Välj tisdsperiod (om du känner för det):', min_value=first_year, max_value=last_year, value=[first_year, last_year])
     desired_start = int(desired_start)
     desired_end = int(desired_end)
     
@@ -68,7 +77,9 @@ if nav == 'EDA':
 
         df = df[df['Month'] == month+1]
         fig, ax = plt.subplots()
-        ax.scatter(x=df['Year'], y=df['Snittemperatur'])
+        sns.scatterplot(data=df, x='Year', y='Snittemperatur')
+        sns.regplot(x=df['Year'], y=df['Snittemperatur'], ci=False)
+        # ax.scatter(x=df['Year'], y=df['Snittemperatur'])
         ax.set_title(f'Temperatures in {month_list[month]}')
         ax.set_xlabel('Year')
         ax.set_ylabel('Average daily temperature, Celcius')
