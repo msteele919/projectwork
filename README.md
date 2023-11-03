@@ -21,13 +21,17 @@ Nederbörd över tid
     Mycket kraftiga regnskurar: >50mm /h
     
 ~~Snödjup över tid~~
-Antal dagar med snö djupare än:
+~~Antal dagar med snö djupare än:~~
     10cm
     20cm
     30cm 
     40cm
     50cm
     
+~~Plotta antal dagar över exempelvis 20cm~~
+
+Extrahera lutningen på trendlinjen (k)
+jämför månad för månad i barplot
 
 ~~Antal dagar med stormvind (24,5 - 28,4 mp/s)~~
 
