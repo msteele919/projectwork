@@ -5,7 +5,7 @@ import seaborn as sns
 
 # juli_temp = ('../plottar/julitempovertid.png')
 
-nav = st.sidebar.radio('Huvudmeny', ['Bakgrund', 'Frågeställning' 'EDA', 'Platser', 'Nederbörd', 'Vind', 'Temperatur', 'Sommarens och vinterns ankomst'])
+nav = st.sidebar.radio('Huvudmeny', ['Bakgrund', 'Frågeställning', 'EDA', 'Platser', 'Nederbörd', 'Vind', 'Temperatur', 'Sommarens och vinterns ankomst'])
 
 if nav == 'Bakgrund':
 
