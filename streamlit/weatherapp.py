@@ -3,9 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# juli_temp = ('../plottar/julitempovertid.png')
-
-nav = st.sidebar.radio('Huvudmeny', ['Bakgrund', 'Frågeställning', 'EDA', 'Platser', 'Nederbörd', 'Vind', 'Temperatur', 'Sommarens och vinterns ankomst'])
+nav = st.sidebar.radio('Huvudmeny', ['Bakgrund', 'Frågeställning', 'EDA', 'Platsinformation', 'Nederbörd', 'Vind', 'Temperatur', 'Sommarens och vinterns ankomst'])
 
 if nav == 'Bakgrund':
 
@@ -24,28 +22,28 @@ if nav == 'EDA':
     # st.session_state
     st.title('Lol, fat chance')
     st.text('Välj månad att se:')
-    df = pd.read_pickle('../dataframes/df_compiled_monthly_temp_gbg_save.pkl')
+    df = pd.read_pickle('../dataframes/df_compiled_adjusted_monthly_temp_gbg_save.pkl')
     first_year = df['Year'].min()
     last_year = df['Year'].max()
     
     col1, col2, col3 = st.columns(3)
 
-    res_January = col1.button('January temp')
-    res_February = col1.button('Febuary temp')
-    res_March = col1.button('March temp')
-    res_April = col1.button('April temp')
-    res_May = col2.button('May temp')
-    res_June = col2.button('June temp')
-    res_July = col2.button('July temp')
-    res_August = col2.button('August temp')
-    res_September = col3.button('September temp')
-    res_October = col3.button('October temp')
-    res_November = col3.button('November temp')
-    res_December = col3.button('December temp')    
+    res_January = col1.button('Januari')
+    res_February = col1.button('Febuari')
+    res_March = col1.button('Mars')
+    res_April = col1.button('April')
+    res_May = col2.button('Maj')
+    res_June = col2.button('Juni')
+    res_July = col2.button('Juli')
+    res_August = col2.button('Augusti')
+    res_September = col3.button('September')
+    res_October = col3.button('Oktober')
+    res_November = col3.button('November')
+    res_December = col3.button('December')    
 
-    month_list = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    month_list = ['Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni', 'Juli', 'Augusti', 'September', 'Oktober', 'November', 'December']
     res_list = [res_January, res_February, res_March, res_April, res_May, res_June, res_July, res_August, res_September, res_October, res_November, res_December]
-    res_list_str = ['res_January', 'res_February', 'res_March', 'res_April', 'res_May', 'res_June', 'res_July', 'res_August', 'res_September', 'res_October', 'res_November', 'res_December']
+    res_list_str = ['res_Januari', 'res_Februari', 'res_Mars', 'res_April', 'res_Maj', 'res_Juni', 'res_Juli', 'res_Augusti', 'res_September', 'res_Oktober', 'res_November', 'res_December']
 
     
 
@@ -80,15 +78,15 @@ if nav == 'EDA':
         sns.scatterplot(data=df, x='Year', y='Snittemperatur')
         sns.regplot(x=df['Year'], y=df['Snittemperatur'], ci=False)
         # ax.scatter(x=df['Year'], y=df['Snittemperatur'])
-        ax.set_title(f'Temperatures in {month_list[month]}')
-        ax.set_xlabel('Year')
-        ax.set_ylabel('Average daily temperature, Celcius')
+        ax.set_title(f'Temperaturer i {month_list[month]}')
+        ax.set_xlabel('År')
+        ax.set_ylabel('Snittemperatur per dag, Celcius')
         st.pyplot(fig)
 
 
-if nav == 'Locations':
-    st.title('Locations in Göteborg')
-    st.text("The station in Gothenburg has changed locations throught the years. \nSince 1998 it's located by Gullbergsvass")
+if nav == 'Platsinformation':
+    st.title('Stationernas platser Göteborg')
+    st.text("Under åren har mätstationen i Göteborg stått på olika ställen. \nSedan 1998 är den belägen vid Gullbergsvass")
     df = pd.DataFrame(pd.read_csv('../data/station_info.csv'))
     df = df.rename(columns={'Latitud (decimalgrader)': 'LAT', 'Longitud (decimalgrader)': 'LON'})
     green_hex = '#06a94d'
@@ -102,12 +100,15 @@ if nav == 'Locations':
 
     st.map(df, color='Colour')
 
-    st.title('Säve')
-    st.write('Säve is located on Hisingen, about 10km from Göteborg. This station has not changed place.')
+    st.title('Säve och Vinga')
+    st.write('Säve ligger på Hisingen, ungefär 10km fågelvägen från centrala Göteborg. Stationen har inte flyttats. Vinga ligger ute i skärgården.')
     save_long = '11.8824'
     save_lat = '57.7786'
-    df_save = pd.DataFrame({'LON': [float(save_long)], 'LAT': [float(save_lat)]})
+    vinga_long = '11.6061'
+    vinga_lat = '57.6322'
+    df_save = pd.DataFrame({'LON': [float(save_long), float(vinga_long)], 'LAT': [float(save_lat), float(vinga_lat)]})
     st.map(df_save, latitude='LAT', longitude='LON', zoom=9, size=1000)
+
 
 if nav == 'Nederbörd':
     st.write('Nä')
@@ -132,8 +133,28 @@ if nav == 'Vind':
    
 
 if nav == 'Temperatur':
-    temp_comp = ('temp_adjusted_comparison.png')
-    st.image(temp_comp, width=1000)
+    total_temps_plus_adjusted = ('../Olof_viz/medeltemperaturer.png')
+    temp_diff = ('../Olof_viz/temp_diff_gbg_save.png')
+    unadjusted = ('../Olof_viz/medeltemp_ojusterad.png')
+    adjusted = ('../Olof_viz/medeltemp_justerad.png')
+    both_datasets_compared = ('../Olof_viz/temp_skilnad_snitt_gbg_save_resp_dataset.png')
+    st.title('EDA')
+    st.text('Data för Säve: 1944-2006 \nData för Göteborg: 1961 ->')
+    st.image(both_datasets_compared, caption='Snabb jämförelse mellan snittemperaturer för båda dataseten')
+    st.write('''Det är i snitt lite varmare i städer. Om vi vill komplettera Säve-datan med data från Göteborg borde vi därför justera något av dataseten så att det blir lite mer
+             rättvisande. Annars kan snittemperaturen stiga drastisk när vi tar data från Göteborg, Annars kan snittemperaturen stiga drastisk när vi tar data från Göteborg, 
+             utan att det nödvändigtvis var varmare.''')
+    
+    st.image(temp_diff, caption='''Skillnader i månadstemperatur mellan Görborg och Säve under den överlappande perioden 1961 till 2006. 
+             Visar hur mycket varmare/kallare Göteborg var än Säve. Vid positivt tal var Göteborg varmare''')
+    
+
+    col1, col2 = st.columns(2)
+    with col1:
+        st.image(unadjusted, caption='Sammansatt dataset av data från Säve fram till 2006.')
+    with col2:
+        st.image(adjusted, caption='Justerat dataset, där temperaturerna från 2006 och framåt justerats enlit resultaten ovan')
+
 
 if nav == 'Sommarens och vinterns ankomst':
     st.title('Sommarens och vinterns ankomst')
