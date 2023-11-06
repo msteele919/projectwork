@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-nav = st.sidebar.radio('Huvudmeny', ['Bakgrund', 'Frågeställning', 'EDA', 'Platsinformation', 'Nederbörd', 'Vind', 'Temperatur', 'Sommarens och vinterns ankomst'])
+nav = st.sidebar.radio('Huvudmeny', ['Bakgrund', 'Frågeställning', 'EDA', 'Platsinformation',  'Vind', 'Snödjup', 'Nederbörd', 'Temperatur', 'Relation mellan nederbörd & temperatur','Sommarens och vinterns ankomst' ])
 
 if nav == 'Bakgrund':
 
