@@ -115,6 +115,8 @@ if nav == 'Nederbörd':
 
 if nav == 'Vind':
     st.title('Överblick över wind data ')
+
+    st.write('"Den vindhastighet som meteorologen anger i prognoser och flertalet av våra mätningar avser ett medelvärde under 10 minuter av vindhastigheten på 10 meters höjd ovan markytan." /SMHI')
     st.write("""Som i de andra exempel har vi konkatenerat Säve och Göteborgs data för att kunna ha data från 1944 till 2023. Med knapparna nedan kan man skrolla igenom 
              """)
     # knappar där man kan kolla på till exempel Säve data, Göteborgs data 
@@ -122,6 +124,7 @@ if nav == 'Vind':
     vind_1 = "../plottar/mean_wind_daily_gbg.png"
     vind_2 = "../plottar/mean_wind_daily_sv.png"
     vind_3 = "../plottar/mean_wind_daily_sv_gt.png"
+    
     compare_visuals = [ vind_1, vind_2, vind_3]
 
     visual_names = ["GBG Snittvindhastighet p/dag", "Säve Snittvindhastighet p/dag", "GBG, Säve sammanlagt, Snittvindhastighet p/dag"]
@@ -130,7 +133,7 @@ if nav == 'Vind':
     visual_index = visual_names.index(current_index)  # Get the index of the selected name
     st.image(compare_visuals[visual_index], caption=current_index)
     
-    st.write("""När vi tittar på vinddata över tid märker vi en minskning av den högsta vindhastigheten per dag.
+    st.write("""När vi tittar på vinddata över tid märker vi en minskning av den genomsnittliga vindhastigheten per dag.
                 Låt oss börja med att undersöka hur vindhastigheten har förändrats beroende på vindriktningen.
              """)
     # wind direction Rose plots 
@@ -138,7 +141,12 @@ if nav == 'Vind':
     vinddir_gbg_2 = "../plottar/wind_dir_gbg_post1980.png"
     vinddir_sav_1 = "../plottar/wind_dir_sav_pre1980.png"
     vinddir_sav_2 = "../plottar/wind_dir_sav_post1980.png"
-    
+    '\n'
+    '\n'
+    st.write('Lägg till för Vinga, se till att plottarna visar rätt saker')
+    st.write('Förklaring av vindrosor:  \n0 grader: Norr  \n90 grader: Öst  \n180 grader: Syd  \n270 grader: Väst')
+    st.write('Cirklarna visar andelen av observationerna i procent.')
+    st.write('Färgerna visar vindhastigheten')
     selected_location = st.selectbox("Select Location", ["GBG", "Säve"])
 
         # Use if-else conditions to display the appropriate visuals
@@ -154,6 +162,18 @@ if nav == 'Vind':
             st.image(vinddir_sav_1, caption="GBG Snittvindhastighet p/dag")
         with col2:
             st.image(vinddir_sav_2, caption="Säve Snittvindhastighet p/dag")
+    hard_winds_over_time = ('../Olof_viz/hard_winds_over_time_comparison.png')
+    st.image(hard_winds_over_time)
+
+    st.write('Trots att antalet mätningar per år ökat rejält på 2000-talet, så har andelen dagar med vindar från riktningarna 0-90 grader (Norr till Öster) minskat i Säve.')
+    winds_from_NE_save = ('../Olof_viz/change_of_wind_0_90_save.png')
+    winds_from_NE_vinga = ('../Olof_viz/change_of_wind_0_90_vinga.png')
+    st.image(winds_from_NE_save, caption='Andelen dagar med uppmätta vindar från 0-90, Säve')
+    st.image(winds_from_NE_vinga, caption='Andelen dagar med uppmätta vindar från 0-90, Vinga')
+
+    st.write('Hur pålitlig är då denna nedgång i vindar från 0-90?')
+    no_meassurements_save = ('../Olof_viz/wind_meassurements_per_year_save.png')
+    st.image(no_meassurements_save, caption='Antalet mätningar per år är ungefär samma sedan 1960')
 
 
 if nav == 'Temperatur':
@@ -166,7 +186,7 @@ if nav == 'Temperatur':
     st.text('Data för Säve: 1944-2006 \nData för Göteborg: 1961 ->')
     st.image(both_datasets_compared, caption='Snabb jämförelse mellan snittemperaturer för båda dataseten')
     st.write('''Det är i snitt lite varmare i städer. Om vi vill komplettera Säve-datan med data från Göteborg borde vi därför justera något av dataseten så att det blir lite mer
-             rättvisande. Annars kan snittemperaturen stiga drastisk när vi tar data från Göteborg, Annars kan snittemperaturen stiga drastisk när vi tar data från Göteborg, 
+             rättvisande. Annars kan snittemperaturen stiga drastisk när vi tar data från Göteborg, 
              utan att det nödvändigtvis var varmare.''')
     
     st.image(temp_diff, caption='''Skillnader i månadstemperatur mellan Görborg och Säve under den överlappande perioden 1961 till 2006. 
