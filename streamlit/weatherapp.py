@@ -186,26 +186,34 @@ if nav == 'Vind':
 
 
         # snitt vindblås per dag, max vindblås per dag, snitt vindblås per månad
-    st.header('Har vinden minskat i Säve på grund av byggnation i Göteborg?')
+    st.header('Är vind minskning i Säve relaterad med byggnation i Göteborg?')
     
-    st.write("""Efter vi hade kollat på vinddata i Göteborg och Säve märktes det att vindblås har sjunkit i sin krafighet över tiden. Vi har funderat på olika möjliga källor till denna försjunkning, som till exempel, klimatförändring. 
-            En annan hypotes som uppstod under vår analysprocess var att vindhastighetsminskningen kan bero på ökad byggnation i Göteborg  under det
-            senaste århundraden. För att undersöka detta jämförde vi vinddata från Säve med SCBs "Färdigställda lägenheter och rumsenheter i nybyggda hus i Göteborg från 1975-2022" """)
+    st.write("""Efter att vi hade kollat på vinddata i Göteborg och Säve märktes det att vindblås har sjunkit i sin krafighet över tiden. Vi har funderat på olika möjliga källor till denna försjunkning, som till exempel, klimatförändring. 
+               En annan hypotes som uppstod under vår analysprocess var att vindhastighetsminskningen kan bero på ökad byggnation i Göteborg. För att undersöka detta jämförde vi vinddata från Säve med SCBs "Färdigställda lägenheter och rumsenheter i nybyggda hus i Göteborg från 1975-2022" """)
     
     st.header("""Bygnationsdata
         """)
-    st.write("""Med byggnations data beräknade vi den kummulativa nybyggdlägenhetsmängd i Göteborg från 1975 - 2006, när Säve datamängden slutades.  
+    st.write("""Med byggnationsdata beräknade vi den kummulativa nybyggdlägenhetsmängd i Göteborg från 1975 - 2006, när Säve datamängden slutades.  
         """)
     st.image('../plottar/kumulativ_lägenheter_gbg.png', width=700)
-    st.write("""När kumulativlägenhetsmängd plottas mot vindhastighet i Säve verkar det som det finns en konvex icke-lineär relationmellan byggnation och vindhastighet över tid  
+    st.write("""När kumulativt antal lägenheter plottas mot årlig vindhastighet i Säve verkar det som det finns en moderat till svag negativ relation.  
         """)
-    st.image('../plottar/bygg_vs_sav_wind.png', width=700)
 
-    st.write("""Eftersom det ser ut som data har en konvex icke-lineär relation, en kvadratisk formulär användes:
-            y = a*X + b*X^2 + c 
-        """)
-    st.image('../plottar/reg_results_sav_bygg_convex.png', width = 700)
-    st.image('../plottar/bygg_wind_sav_perab.png', width = 700)
+    st.write("""För att undersöka relationen använde vi en lineär OLS regression ekvation användes:""")
+    st.write("""y = a * X + c """)
+    
+    st.image('../plottar/reg_results_sav_bygg_linear.png', width = 700)
+
+    st.write("""Resultatet visar att en lineärregression model är signifikant (p = 0,0248) med en R-squared värde av 16,7%. Kumulativt antal lägenheter koefficienten var signifikant (p = 0,025) och är relaterad till en 0,00000377 °C årlig minskning i snitttemperatur i genomsnitt. 
+             Det verkar som relationen är dock heteroskedastic. Detta står i konflikt med OLS-antagandet om homoskedasticitet. 
+    """)
+    st.write("""Det kan emellertid finnas utrymme för tolkning som skulle förklara detta heteroskedastiska beteende. Eftersom en lägre mängd bostäder skulle påverka vinden mindre, kan variationsnivån därför variera kraftigt. 
+             Verkligen kan vinden vissa år vara lägre eller högre baserat på många andra faktorer. Dock, när byggnadsnivåerna ökar, ökar även mängden vindhinder, vilket gör att högre vindhastigheter är mindre troliga att registreras, vilket förklarar det tydligare sambandet mellan byggnadsnivåer och vindhastigheter när byggnadsnivåerna ökar.
+    """)
+    
+
+    st.image('../plottar/bygg_wind_sav_linear.png', width = 700)
+    
 
 if nav == 'Temperatur':
     total_temps_plus_adjusted = ('../Olof_viz/medeltemperaturer.png')
