@@ -114,11 +114,11 @@ if nav == 'Nederbörd':
     st.write('Nä')
 
 if nav == 'Vind':
-    st.title('Överblick över wind data ')
-    st.write("""Som i de andra exempel har vi konkatenerat Säve och Göteborgs data för att kunna ha data från 1944 till 2023. Med knapparna nedan kan man skrolla igenom 
-             """)
-    # knappar där man kan kolla på till exempel Säve data, Göteborgs data 
-        # Meta knappar: välj mellan säve, Göteborg, Säve & Göteborg
+    st.title('Överblick över wind data')
+    st.write("""Som i de andra exempel tänkte vi konkatenera Säve och Göteborgs data för att kunna få en datamängd som sträckte sig över en längre period, från 1944 till 2023. Med knapparna nedan kan man se varenda plotta och sedan Göteborg och Säve data sammanställt. 
+            """)
+    
+    # Meta knappar: välj mellan säve, Göteborg, Säve & Göteborg
     vind_1 = "../plottar/mean_wind_daily_gbg.png"
     vind_2 = "../plottar/mean_wind_daily_sv.png"
     vind_3 = "../plottar/mean_wind_daily_sv_gt.png"
@@ -126,20 +126,32 @@ if nav == 'Vind':
 
     visual_names = ["GBG Snittvindhastighet p/dag", "Säve Snittvindhastighet p/dag", "GBG, Säve sammanlagt, Snittvindhastighet p/dag"]
     # Display the current visual based on a user-selected name
-    current_index = st.selectbox("Select Visual", visual_names, index=0)
+    current_index = st.selectbox("Välj stationen", visual_names, index=0)
     visual_index = visual_names.index(current_index)  # Get the index of the selected name
     st.image(compare_visuals[visual_index], caption=current_index)
     
-    st.write("""När vi tittar på vinddata över tid märker vi en minskning av den högsta vindhastigheten per dag.
-                Låt oss börja med att undersöka hur vindhastigheten har förändrats beroende på vindriktningen.
-             """)
+    st.title('En läringsprocess: Finns det en trend i vind hastighet över tid och går det att jämföra Göteborg och Säve?')
+
+    st.write("""När vi tittade på den sammanställda snittvindhästighets datamängden från Säve/Göteborg trodde vi först att det visades en negativ trend i Göteborg/Säves vindhastighet övertid.
+            """)
+    st.write("""Var detta en välgrundad slutsats? Följ med på vår journey och ta reda på det""")
+
+    st.write("""När vi försökte ta reda på varför vindhastigheten hade minskat i Göteborg/Säve data mängden påstådde vi att byggnation i Göteborg över tid skulle kunna stå för den minskning. 
+                """)
+
+    
+
+
+    # intensitivitet över tiden 
+
+
     # wind direction Rose plots 
     vinddir_gbg_1 = "../plottar/wind_dir_gbg_pre1980.png"
     vinddir_gbg_2 = "../plottar/wind_dir_gbg_post1980.png"
     vinddir_sav_1 = "../plottar/wind_dir_sav_pre1980.png"
     vinddir_sav_2 = "../plottar/wind_dir_sav_post1980.png"
     
-    selected_location = st.selectbox("Select Location", ["GBG", "Säve"])
+    selected_location = st.selectbox("Välj stationen", ["GBG", "Säve"])
 
         # Use if-else conditions to display the appropriate visuals
     if selected_location == "GBG":
@@ -154,7 +166,46 @@ if nav == 'Vind':
             st.image(vinddir_sav_1, caption="GBG Snittvindhastighet p/dag")
         with col2:
             st.image(vinddir_sav_2, caption="Säve Snittvindhastighet p/dag")
+    
+    # compare_dir = [ vinddir_gbg_1, vinddir_gbg_2]
+    # visual_names_dir = ["GBG Snittvindhastighet p/dag", "Säve Snittvindhastighet p/dag", "GBG, Säve sammanlagt, Snittvindhastighet p/dag"]
+    # # Display the current visual based on a user-selected name
+    # current_index_dir = st.selectbox("Select Visual", visual_names_dir, index=0)
+    # visual_index_dir = visual_names_dir.index(current_index_dir)  # Get the index of the selected name
+    # st.image(compare_dir[visual_index_dir], caption=current_index_dir)
+    
 
+
+
+    
+
+    # Display the visuals
+    # st.image(vind_1, caption='Visual 1')
+    # st.image(vind_2, caption='Visual 2')
+    # st.image(vind_3, caption='Visual 3')
+
+
+        # snitt vindblås per dag, max vindblås per dag, snitt vindblås per månad
+    st.header('Har vinden minskat i Säve på grund av byggnation i Göteborg?')
+    
+    st.write("""Efter vi hade kollat på vinddata i Göteborg och Säve märktes det att vindblås har sjunkit i sin krafighet över tiden. Vi har funderat på olika möjliga källor till denna försjunkning, som till exempel, klimatförändring. 
+            En annan hypotes som uppstod under vår analysprocess var att vindhastighetsminskningen kan bero på ökad byggnation i Göteborg  under det
+            senaste århundraden. För att undersöka detta jämförde vi vinddata från Säve med SCBs "Färdigställda lägenheter och rumsenheter i nybyggda hus i Göteborg från 1975-2022" """)
+    
+    st.header("""Bygnationsdata
+        """)
+    st.write("""Med byggnations data beräknade vi den kummulativa nybyggdlägenhetsmängd i Göteborg från 1975 - 2006, när Säve datamängden slutades.  
+        """)
+    st.image('../plottar/kumulativ_lägenheter_gbg.png', width=700)
+    st.write("""När kumulativlägenhetsmängd plottas mot vindhastighet i Säve verkar det som det finns en konvex icke-lineär relationmellan byggnation och vindhastighet över tid  
+        """)
+    st.image('../plottar/bygg_vs_sav_wind.png', width=700)
+
+    st.write("""Eftersom det ser ut som data har en konvex icke-lineär relation, en kvadratisk formulär användes:
+            y = a*X + b*X^2 + c 
+        """)
+    st.image('../plottar/reg_results_sav_bygg_convex.png', width = 700)
+    st.image('../plottar/bygg_wind_sav_perab.png', width = 700)
 
 if nav == 'Temperatur':
     total_temps_plus_adjusted = ('../Olof_viz/medeltemperaturer.png')
