@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-nav = st.sidebar.radio('Huvudmeny', ['Bakgrund', 'Frågeställning', 'EDA', 'Platsinformation',  'Vind', 'Snödjup', 'Nederbörd', 'Temperatur', 'Relation mellan nederbörd & temperatur','Sommarens och vinterns ankomst' ])
+nav = st.sidebar.radio('Huvudmeny', ['Bakgrund', 'Frågeställning', 'EDA', 'Platsinformation',  'Vind', 'Snödjup', 'Nederbörd', 'Temperatur', 'Relationen mellan nederbörd & temperatur','Sommarens och vinterns ankomst' ])
 
 if nav == 'Bakgrund':
 
@@ -238,6 +238,27 @@ if nav == 'Temperatur':
     with col2:
         st.image(adjusted, caption='Justerat dataset, där temperaturerna från 2006 och framåt justerats enlit resultaten ovan')
 
+if nav == 'Relationen mellan nederbörd & temperatur':
+    st.title("Relationen mellan nederbörd & temperatur")
+    st.write("På tidigare sidor har vi utforskat både temperatur och nederbörd i detalj. Syftet med denna sida är att upptäcka hur de två samverkar över tiden")
+    st.header("Summary Statistics:")
+    st.image("../plottar/sum_stat_temp_nederbörd.png", width=400)
+    st.write("Histogram för både genomsnittlig månadstemperatur och total månatlig nederbörd:")
+    st.image("../plottar/histogram_temp_nederbörd.png", width=700)
+    st.write("Månatlig genomsnittstemperatur versus total månatlig nederbörd:")
+    st.image("../plottar/scatter_temp_nederbörd.png", width = 700)
+    st.write("Scatterplottan för månatlig genomsnittstemperatur gentemot total månatlig nederbörd visar ett möjligt heteroskedastiskt förhållande. Det verkar som att när snittemperatur är låg, är även total nederbörd låg. När den genomsnittliga temperaturen stiger, ökar omfånget av total månatlig nederbörd. När den genomsnittliga månadstemperaturen når cirka 0 till 2 °C, verkar förhållandet mellan de två variablerna helt okorrelerat, om inte visar en svagt positiv korrelation.")
+    st.header("Regression")
+    st.write("En OLS-linjär regression används för att uttrycka förhållandet mellan genomsnittlig månadstemperatur och månatlig total nederbörd.")
+    st.write("Den enkla ekvationen är: y = a + b * x + C")
+    st.write(" Vid första anblicken verkar variablerna kunna ha potentiellt oroväckande egenskaper för att köra en OLS. Som tidigare nämnts förefaller det finnas heteroskedasticitet. Därför används robust kovarians för att hjälpa till att rätta till koefficienterna för heteroskedasticitet.")
+    st.image("../plottar/reg_results_ned_temp.png", width = 700)
+    st.image("../plottar/scatter_trendline_temp_ned.png", width=700)
+    st.write("""
+    Den linjära OLS-modellen är statistiskt signifikant med en F-poäng på 26,04 (p = 4,04e-07). R-torget är 2,25%. Koefficienterna är en intercep för 60,955 (p = 0,000) och koefficienten för månatlig genomsnittstemperatur är 0,89 (p = 0,000).
+    Detta resultat tyder på att genomsnittlig månadstemperaturdata är signifikant relaterad till 2,5% av förändringen i total månatlig nederbörd i datasetet. Det är inte mycket, men det kan ha konsekvenser att säga att temperaturen har en viss liten prediktiv korrelation med nederbördsvolymerna. Det föreslår att i denna dataset är en ökning med en enhet i temperaturen relaterad till en ökning av 0,8956 mm i nederbörd.
+    Som syns i spridningsdiagrammet är trendlinjen inte brant. Det är möjligt att överväga att den positiva lutningen kan relatera till den initiala positiva förändringen vid lägre temperaturer och även det möjligtvis heteroskedastiska förhållandet som verkar finnas i hela datasetet.""")
+   
 
 if nav == 'Sommarens och vinterns ankomst':
     st.title('Sommarens och vinterns ankomst')
