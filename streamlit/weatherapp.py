@@ -137,10 +137,10 @@ if nav == 'Vind':
                 Låt oss börja med att undersöka hur vindhastigheten har förändrats beroende på vindriktningen.
              """)
     # wind direction Rose plots 
-    vinddir_gbg_1 = "../plottar/wind_dir_gbg_pre1980.png"
-    vinddir_gbg_2 = "../plottar/wind_dir_gbg_post1980.png"
-    vinddir_sav_1 = "../plottar/wind_dir_sav_pre1980.png"
-    vinddir_sav_2 = "../plottar/wind_dir_sav_post1980.png"
+    vinddir_gbg_1 = "../plottar/windrose_all_winds_pre_1992_gbg.png"
+    vinddir_gbg_2 = "../plottar/windrose_all_winds_post_1992_gbg.png"
+    vinddir_sav_1 = "../plottar/windrose_all_winds_pre_1978_save.png"
+    vinddir_sav_2 = "../plottar/windrose_all_winds_post_1978_save.png"
     '\n'
     '\n'
     st.write('Lägg till för Vinga, se till att plottarna visar rätt saker')
@@ -155,25 +155,31 @@ if nav == 'Vind':
         with col1:
             st.image(vinddir_gbg_1, caption="GBG Snittvindhastighet p/dag")
         with col2:
-            st.image(vinddir_gbg_2, caption="Säve Snittvindhastighet p/dag")
+            st.image(vinddir_gbg_2, caption="GBG Snittvindhastighet p/dag")
     elif selected_location == "Säve":
         col1, col2 = st.columns(2)
         with col1:
-            st.image(vinddir_sav_1, caption="GBG Snittvindhastighet p/dag")
+            st.image(vinddir_sav_1, caption="Säve Snittvindhastighet p/dag")
         with col2:
             st.image(vinddir_sav_2, caption="Säve Snittvindhastighet p/dag")
+    '\n'
+    st.write('I vindrosorna ovan ärd et stora skillnader i Göteborg, men inte i Säve.  \nVi kan titta på antalet observationer över tid för att se om detta påverkar.')
+    no_meassurements_save = ('../Olof_viz/wind_meassurements_per_year_save.png')
+    no_meassurements_gbg = ('../Olof_viz/wind_meassurements_per_year_gbg.png')
+    st.image(no_meassurements_save, caption='Antalet mätningar per år är ungefär samma sedan 1960')
+    st.image(no_meassurements_gbg, caption='Drastisk skillnad i Göteborg')
+    '\n'
     hard_winds_over_time = ('../Olof_viz/hard_winds_over_time_comparison.png')
     st.image(hard_winds_over_time)
 
-    st.write('Trots att antalet mätningar per år ökat rejält på 2000-talet, så har andelen dagar med vindar från riktningarna 0-90 grader (Norr till Öster) minskat i Säve.')
+    st.write('Den enda riktningarn där andelen vinddagar minskar är får 0 grader till 90 grader')
     winds_from_NE_save = ('../Olof_viz/change_of_wind_0_90_save.png')
     winds_from_NE_vinga = ('../Olof_viz/change_of_wind_0_90_vinga.png')
     st.image(winds_from_NE_save, caption='Andelen dagar med uppmätta vindar från 0-90, Säve')
+    st.write('Detta gäller dock inte Vinga')
     st.image(winds_from_NE_vinga, caption='Andelen dagar med uppmätta vindar från 0-90, Vinga')
 
-    st.write('Hur pålitlig är då denna nedgång i vindar från 0-90?')
-    no_meassurements_save = ('../Olof_viz/wind_meassurements_per_year_save.png')
-    st.image(no_meassurements_save, caption='Antalet mätningar per år är ungefär samma sedan 1960')
+
 
 
 if nav == 'Temperatur':
