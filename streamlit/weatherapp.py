@@ -3,11 +3,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-nav = st.sidebar.radio('Huvudmeny', ['Bakgrund', 'Frågeställning', 'EDA', 'Platsinformation', 'Nederbörd', 'Vind', 'Temperatur', 'Sommarens och vinterns ankomst'])
+nav = st.sidebar.radio('Huvudmeny', ['Bakgrund', 'Frågeställning', 'EDA', 'Platsinformation', 'Vind', 'Snödjup', 'Nederbörd', 'Temperatur', 'Relationen mellan nederbörd & temperatur', 'Sommarens och vinterns ankomst'])
 
 if nav == 'Bakgrund':
 
-    st.title('Jasså, det vill du allt bra veta va?')
     st.text('''1. Kan man med hjälp av historisk väderdata se trender kring förändringar i vädret?
             
             \nHur har temperaturen ändrats sedan första datan?
@@ -114,7 +113,9 @@ if nav == 'Nederbörd':
     st.write('Nä')
 
 if nav == 'Vind':
-    st.title('Överblick över wind data ')
+    #### Overview
+
+    st.title('Överblick över vind-data ')
 
     st.write('"Den vindhastighet som meteorologen anger i prognoser och flertalet av våra mätningar avser ett medelvärde under 10 minuter av vindhastigheten på 10 meters höjd ovan markytan." /SMHI')
     st.write("""Som i de andra exempel har vi konkatenerat Säve och Göteborgs data för att kunna ha data från 1944 till 2023. Med knapparna nedan kan man skrolla igenom 
@@ -132,22 +133,37 @@ if nav == 'Vind':
     current_index = st.selectbox("Select Visual", visual_names, index=0)
     visual_index = visual_names.index(current_index)  # Get the index of the selected name
     st.image(compare_visuals[visual_index], caption=current_index)
-    
+
+    ## Michael verison
+    st.title('En läringsprocess: Finns det en trend i vind hastighet över tid och går det att jämföra Göteborg och Säve?')
+
+    st.write("""När vi tittade på den sammanställda snittvindhästighets datamängden från Säve/Göteborg trodde vi först att det visades en negativ trend i Göteborg/Säves vindhastighet övertid.
+            """)
+    st.write("""Var detta en välgrundad slutsats? Följ med på vår journey och ta reda på det""")
+
+    st.write("""När vi försökte ta reda på varför vindhastigheten hade minskat i Göteborg/Säve data mängden påstådde vi att byggnation i Göteborg över tid skulle kunna stå för den minskning. 
+                """)
+
+    ## Olof version
     st.write("""När vi tittar på vinddata över tid märker vi en minskning av den genomsnittliga vindhastigheten per dag.
                 Låt oss börja med att undersöka hur vindhastigheten har förändrats beroende på vindriktningen.
              """)
+    
     # wind direction Rose plots 
     vinddir_gbg_1 = "../plottar/windrose_all_winds_pre_1992_gbg.png"
     vinddir_gbg_2 = "../plottar/windrose_all_winds_post_1992_gbg.png"
     vinddir_sav_1 = "../plottar/windrose_all_winds_pre_1978_save.png"
     vinddir_sav_2 = "../plottar/windrose_all_winds_post_1978_save.png"
+    vinddir_vinga_1 = "../plottar/windrose_all_winds_pre_1978_vinga.png"
+    vinddir_vinga_2 = "../plottar/windrose_all_winds_post_1978_vinga.png"
     '\n'
     '\n'
-    st.write('Lägg till för Vinga, se till att plottarna visar rätt saker')
+
     st.write('Förklaring av vindrosor:  \n0 grader: Norr  \n90 grader: Öst  \n180 grader: Syd  \n270 grader: Väst')
+    st.write('Varje arm täcker 22.5 grader. Så armern rakt norrut täcker vindar från 348.75 grader till 11.25 grader')
     st.write('Cirklarna visar andelen av observationerna i procent.')
     st.write('Färgerna visar vindhastigheten')
-    selected_location = st.selectbox("Select Location", ["GBG", "Säve"])
+    selected_location = st.selectbox("Select Location", ["GBG", "Säve", "Vinga"])
 
         # Use if-else conditions to display the appropriate visuals
     if selected_location == "GBG":
@@ -162,32 +178,84 @@ if nav == 'Vind':
             st.image(vinddir_sav_1, caption="Säve Snittvindhastighet p/dag")
         with col2:
             st.image(vinddir_sav_2, caption="Säve Snittvindhastighet p/dag")
+    elif selected_location == "Vinga":
+        col1, col2 = st.columns(2)
+        with col1:
+            st.image(vinddir_vinga_1, caption="Vinga Snittvindhastighet p/dag")
+        with col2:
+            st.image(vinddir_vinga_2, caption="Vinga Snittvindhastighet p/dag")
+
+    #### Look at reliability
     '\n'
-    st.write('I vindrosorna ovan ärd et stora skillnader i Göteborg, men inte i Säve.  \nVi kan titta på antalet observationer över tid för att se om detta påverkar.')
+    st.write('I Göteborgs-datan så mättes färre vindriktningar tidigare, men så är inte fallet med Säve och Vinga')
+    st.write('I vindrosorna ovan är det stora skillnader i Göteborg och även Vinga, men inte i Säve.  \nVi kan titta på antalet observationer över tid för att se om detta påverkar.')
+
     no_meassurements_save = ('../Olof_viz/wind_meassurements_per_year_save.png')
     no_meassurements_gbg = ('../Olof_viz/wind_meassurements_per_year_gbg.png')
+    no_meassurements_vinga = "../plottar/wind_meassurements_per_year_vinga.png"
     st.image(no_meassurements_save, caption='Antalet mätningar per år är ungefär samma sedan 1960')
     st.image(no_meassurements_gbg, caption='Drastisk skillnad i Göteborg')
+    st.image(no_meassurements_vinga, caption='Stor skilnad även på Vinga')
     '\n'
-    hard_winds_over_time = ('../Olof_viz/hard_winds_over_time_comparison.png')
-    st.image(hard_winds_over_time)
-
-    st.write('Den enda riktningarn där andelen vinddagar minskar är får 0 grader till 90 grader')
+    
+    #### Change of directions, all winds
+    st.write('Den enda riktningen där andelen vinddagar minskar är från 0 grader till 90 grader')
     winds_from_NE_save = ('../Olof_viz/change_of_wind_0_90_save.png')
     winds_from_NE_vinga = ('../Olof_viz/change_of_wind_0_90_vinga.png')
     st.image(winds_from_NE_save, caption='Andelen dagar med uppmätta vindar från 0-90, Säve')
     st.write('Detta gäller dock inte Vinga')
     st.image(winds_from_NE_vinga, caption='Andelen dagar med uppmätta vindar från 0-90, Vinga')
 
+    #### Harder winds
+    st.title('Hårdare vindar')
+    hard_winds_over_time = ('../Olof_viz/hard_winds_over_time_comparison.png')
+    st.image(hard_winds_over_time)
 
 
+
+    hard_winds_over_time_save = "../plottar/hard_winds_save_barplot.png"
+    hard_winds_over_time_vinga = "../plottar/hard_winds_vinga_barplot.png"
+    st.image(hard_winds_over_time_save)
+    st.image(hard_winds_over_time_vinga)
+
+
+    #### Correlation with buildings
+
+    st.header('Är vind minskning i Säve relaterad med byggnation i Göteborg?')
+    
+    st.write("""Efter att vi hade kollat på vinddata i Göteborg och Säve märktes det att vindblås har sjunkit i sin krafighet över tiden. Vi har funderat på olika möjliga källor till denna försjunkning, som till exempel, klimatförändring. 
+               En annan hypotes som uppstod under vår analysprocess var att vindhastighetsminskningen kan bero på ökad byggnation i Göteborg. För att undersöka detta jämförde vi vinddata från Säve med SCBs "Färdigställda lägenheter och rumsenheter i nybyggda hus i Göteborg från 1975-2022" """)
+    
+    st.header("""Bygnationsdata
+        """)
+    st.write("""Med byggnationsdata beräknade vi den kummulativa nybyggdlägenhetsmängd i Göteborg från 1975 - 2006, när Säve datamängden slutades.  
+        """)
+    st.image('../plottar/kumulativ_lägenheter_gbg.png', width=700)
+    st.write("""När kumulativt antal lägenheter plottas mot årlig vindhastighet i Säve verkar det som det finns en moderat till svag negativ relation.  
+        """)
+
+    st.write("""För att undersöka relationen använde vi en lineär OLS regression ekvation användes:""")
+    st.write("""y = a * X + c """)
+    
+    st.image('../plottar/reg_results_sav_bygg_linear.png', width = 700)
+
+    st.write("""Resultatet visar att en lineärregression model är signifikant (p = 0,0248) med en R-squared värde av 16,7%. Kumulativt antal lägenheter koefficienten var signifikant (p = 0,025) och är relaterad till en 0,00000377 °C årlig minskning i snitttemperatur i genomsnitt. 
+             Det verkar som relationen är dock heteroskedastic. Detta står i konflikt med OLS-antagandet om homoskedasticitet. 
+    """)
+    st.write("""Det kan emellertid finnas utrymme för tolkning som skulle förklara detta heteroskedastiska beteende. Eftersom en lägre mängd bostäder skulle påverka vinden mindre, kan variationsnivån därför variera kraftigt. 
+             Verkligen kan vinden vissa år vara lägre eller högre baserat på många andra faktorer. Dock, när byggnadsnivåerna ökar, ökar även mängden vindhinder, vilket gör att högre vindhastigheter är mindre troliga att registreras, vilket förklarar det tydligare sambandet mellan byggnadsnivåer och vindhastigheter när byggnadsnivåerna ökar.
+    """)
+    
+
+    st.image('../plottar/bygg_wind_sav_linear.png', width = 700)
+    
 
 if nav == 'Temperatur':
     total_temps_plus_adjusted = ('../Olof_viz/medeltemperaturer.png')
     temp_diff = ('../Olof_viz/temp_diff_gbg_save.png')
     unadjusted = ('../Olof_viz/medeltemp_ojusterad.png')
     adjusted = ('../Olof_viz/medeltemp_justerad.png')
-    both_datasets_compared = ('../Olof_viz/temp_skilnad_snitt_gbg_save_resp_dataset.png')
+    both_datasets_compared = ('../plottar/temp_skilnad_snitt_gbg_save_resp_dataset.png')
     st.title('EDA')
     st.text('Data för Säve: 1944-2006 \nData för Göteborg: 1961 ->')
     st.image(both_datasets_compared, caption='Snabb jämförelse mellan snittemperaturer för båda dataseten')
@@ -203,7 +271,7 @@ if nav == 'Temperatur':
     with col1:
         st.image(unadjusted, caption='Sammansatt dataset av data från Säve fram till 2006.')
     with col2:
-        st.image(adjusted, caption='Justerat dataset, där temperaturerna från 2006 och framåt justerats enlit resultaten ovan')
+        st.image(adjusted, caption='Justerat dataset, där temperaturerna från 2006 och framåt justerats enligt resultaten ovan')
 
 
 if nav == 'Sommarens och vinterns ankomst':
