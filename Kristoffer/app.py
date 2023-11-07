@@ -9,9 +9,29 @@ precip = pd.read_pickle("../Dataframes/df_compiled_daily_precipitation_gbg_save.
 snodjup = pd.read_pickle("../Dataframes/df_snow_save.pkl")
 aprilregn = ("../plottar/aprilregn.png")
 oktoberregn = ("../plottar/oktoberregn.png")
+sno10 = snodjup.query("Snödjup >= .1")
+sno20 = snodjup.query("Snödjup >= .2")
+sno30 = snodjup.query("Snödjup >= .3")
+sno40 = snodjup.query("Snödjup >= .4")
+sno50 = snodjup.query("Snödjup >= .5")
 
+intervaller = { '10 cm' : sno10, '20 cm' : sno20, '30 cm' : sno30, '40 cm' : sno40, '50 cm' : sno50} 
+snointervaller = [sno10, sno20, sno30, sno40, sno50]
 
-nav = st.sidebar.radio('Meny',['Syfte och frågeställning', 'Nederbörd', 'Snödjup'])
+# def snodjupfunk(djup):
+#     sns.scatterplot(data=djup, x='Datum', y='Snödjup')
+#     plt.title(f'Antal observerade dagar per år med mer än {djup}cm snö.')
+#     plt.xlabel('År')
+#     plt.ylabel('Snödjup i meter')
+#     plt.show()
+
+def count_10_year_intervals(data):
+    data = data.drop_duplicates(subset='Datum')
+    bins = list(range(1944, 2005, 10))
+    interval_counts = data.groupby(pd.cut(data['Year'], bins=bins), observed=True).size()
+    return interval_counts
+
+nav = st.sidebar.radio('Meny',['Syfte och frågeställning', 'Snödjup', 'Nederbörd'])
 if nav == 'Syfte och frågeställning':
     st.title('Undersökning av väderdata kring Göteborgsområdet från 1944 till 2023')
     st.header('Syftet med valt projekt:')
@@ -23,6 +43,36 @@ if nav == 'Syfte och frågeställning':
 
     st.write('')
 
+if nav == 'Snödjup':
+    st.title('Snödjup')
+    st.subheader('Information om datan')
+    st.write(f"""Snödjupet är mätt på Säve mätstation som ligger vid Säve flygplats. Datan är insamlad mellan januari 1944 och december 2003 och mäts i meter.
+             \nDet är lite glapp i informationen.""")
+    if st.checkbox('Visa antal observationer per år.'):
+        st.write(snodjup.Year.value_counts())
+    st.subheader("""Hur ser det ut egentligen med snö över tid?""")
+    st.write("Snödjup i meter")
+    st.write(f"Minsta snödjup: {snodjup['Snödjup'].min()}m")
+    st.write(f"Medelsnödjup över alla år: {round(snodjup['Snödjup'].mean(),3)}m")
+    st.write(f"Max uppmätta snödjupet: {snodjup['Snödjup'].max()}m")
+    st.subheader('Vi tittar på perioden då det snöar.')
+    st.image("../plottar/snodjuppermånad.png")
+    st.write("""Det är ju rimligt att snö-observationerna är mellan januari och maj och oktober och december då det inte snöar under sommaren.""")
+    st.write("Hur ligger det då till med snödjupet när det väl snöar en period?")
+    st.image("../plottar/snöperperiod.png")
+    st.write('Som vi ser här är det inte så konstigt att det ligger mer snö på marken i slutet av perioden egentligen.')
+    st.write("Hur har det sett ut genom åren?")
+    st.image("../plottar/totalsnödjup.png")
+    st.write("Det verkar ju onekligen som att det är mindre snö på marken efter 90-talet jämfört med exempelvis 80-talet.")
+
+    # selected_dataframe = st.selectbox("Visa antal dagar med snödjup över: ", list(intervaller.keys()))
+    # if selected_dataframe in intervaller:
+    #     selected_label = intervaller[selected_dataframe]
+    #     interval_counts = count_10_year_intervals(selected_label)
+    #     st.write("Antal dagar per årtionde:")
+    #     st.write(interval_counts)
+    # else:
+    #     st.write("Ogiltigt val")
 
 if nav == 'Nederbörd':
     st.title('Nederbörd')
@@ -33,7 +83,7 @@ if nav == 'Nederbörd':
     st.subheader('Hur ser det ut med nederbörden?')
     st.image("../plottar/snittnederbördövertid.png")
     st.write("""Enligt grafen så verkar det pendla en del mellan åren, men det verkar ju som att det snittnederbörden ökar över tid.
-             Vi kan dubbelkolla detta genom att göra en plot med en trendlinje som med enkel linjär regression räknar ut ett samband mellan genomsnitssregnfall och datum.
+             Vi kan dubbelkolla detta genom att göra en plot med en trendlinje som med enkel linjär regression räknar ut ett samband mellan genomsnitssregnfall och datum. 
              \nNågonting hände där vid 2008, kan vi se när det blev av?""")
     st.image("../plottar/regn200808.png")
     st.write('Där ser vi att det regnade som fasen den 27e augusti.')
@@ -56,21 +106,3 @@ if nav == 'Nederbörd':
              trots att det är i regel en väldigt regning månad medan oktober månad visar störst genomsnitssförändring, trots att det också i regel är en väldigt regnig månad.
               """)
 
-
-if nav == 'Snödjup':
-    st.title('Snödjup')
-    st.subheader('Information om datan')
-    st.write(f"""Snödjupet är mätt på Säve mätstation som ligger vid Säve flygplats. Datan är insamlad mellan januari 1944 och december 2003 och mäts i meter.
-             \nDet är lite glapp i informationen i form av bristande mätningar över åren.""")
-    if st.checkbox('Visa antal observationer per år.'):
-        st.write(snodjup.Year.value_counts())
-    st.subheader("""Hur ser det ut egentligen med snö över tid?""")
-    st.write("Snödjup i meter")
-    st.write(f"Minsta snödjup: {snodjup['Snödjup'].min()}m")
-    st.write(f"Medelsnödjup över alla år: {round(snodjup['Snödjup'].mean(),3)}m")
-    st.write(f"Max uppmätta snödjupet: {snodjup['Snödjup'].max()}m")
-    st.subheader('Vi tittar på perioden då det snöar.')
-    st.image("../plottar/snodjuppermånad.png")
-    st.write("""Det är ju rimligt att snö-observationerna är mellan januari och maj och oktober och december då det inte snöar under sommaren.""")
-    
-    
