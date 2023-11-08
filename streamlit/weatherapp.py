@@ -85,28 +85,13 @@ if nav == 'EDA':
 
 if nav == 'Platsinformation':
     st.title('Stationernas platser Göteborg')
-    st.text("Under åren har mätstationen i Göteborg stått på olika ställen. \nSedan 1998 är den belägen vid Gullbergsvass")
-    df = pd.DataFrame(pd.read_csv('../data/station_info.csv'))
-    df = df.rename(columns={'Latitud (decimalgrader)': 'LAT', 'Longitud (decimalgrader)': 'LON'})
-    green_hex = '#06a94d'
-    red_hex = '#EE0000'
-    current = df['Tidsperiod (t.o.m)'].max()
-    for ind, row in df.iterrows():
-        if row['Tidsperiod (t.o.m)'] == current:
-            df.at[ind, 'Colour'] = green_hex
-        else:
-            df.at[ind, 'Colour'] = red_hex
+    st.write("Under åren har mätstationen i Göteborg stått på olika ställen. \nSedan 1998 är den belägen vid Gullbergsvass")
 
-    st.map(df, color='Colour')
-
-    st.title('Säve och Vinga')
     st.write('Säve ligger på Hisingen, ungefär 10km fågelvägen från centrala Göteborg. Stationen har inte flyttats. Vinga ligger ute i skärgården.')
-    save_long = '11.8824'
-    save_lat = '57.7786'
-    vinga_long = '11.6061'
-    vinga_lat = '57.6322'
-    df_save = pd.DataFrame({'LON': [float(save_long), float(vinga_long)], 'LAT': [float(save_lat), float(vinga_lat)]})
-    st.map(df_save, latitude='LAT', longitude='LON', zoom=9, size=1000)
+
+    stations = pd.read_pickle('../Dataframes/station_info.pkl')
+    st.map(stations, latitude='LAT', longitude='LON', zoom=9.5, size=500)
+
 
 
 if nav == 'Nederbörd':
@@ -118,21 +103,25 @@ if nav == 'Vind':
     st.title('Överblick över vind-data ')
 
     st.write('"Den vindhastighet som meteorologen anger i prognoser och flertalet av våra mätningar avser ett medelvärde under 10 minuter av vindhastigheten på 10 meters höjd ovan markytan." /SMHI')
-    st.write("""Som i de andra exempel har vi konkatenerat Säve och Göteborgs data för att kunna ha data från 1944 till 2023. Med knapparna nedan kan man skrolla igenom 
-             """)
+    # st.write("""Som i de andra exempel har vi konkatenerat Säve och Göteborgs data för att kunna ha data från 1944 till 2023. Med knapparna nedan kan man skrolla igenom 
+    #          """)
+    st.write('Göteborg har luckor i sin data, så vi jämför bara Säve med Vinga. ')
+    #### Below is the section for seeing the wind data decrease
+
     # knappar där man kan kolla på till exempel Säve data, Göteborgs data 
         # Meta knappar: välj mellan säve, Göteborg, Säve & Göteborg
-    vind_1 = "../plottar/mean_wind_daily_gbg.png"
+    # vind_1 = "../plottar/mean_wind_daily_gbg.png"
     vind_2 = "../plottar/mean_wind_daily_sv.png"
-    vind_3 = "../plottar/mean_wind_daily_sv_gt.png"
-    
-    compare_visuals = [ vind_1, vind_2, vind_3]
+    # vind_3 = "../plottar/mean_wind_daily_sv_gt.png"
+    st.image(vind_2, caption='Vindarna blir svagare över tid')
 
-    visual_names = ["GBG Snittvindhastighet p/dag", "Säve Snittvindhastighet p/dag", "GBG, Säve sammanlagt, Snittvindhastighet p/dag"]
-    # Display the current visual based on a user-selected name
-    current_index = st.selectbox("Select Visual", visual_names, index=0)
-    visual_index = visual_names.index(current_index)  # Get the index of the selected name
-    st.image(compare_visuals[visual_index], caption=current_index)
+    # compare_visuals = [ vind_1, vind_2, vind_3]
+
+    # visual_names = ["GBG Snittvindhastighet p/dag", "Säve Snittvindhastighet p/dag", "GBG, Säve sammanlagt, Snittvindhastighet p/dag"]
+    # # Display the current visual based on a user-selected name
+    # current_index = st.selectbox("Select Visual", visual_names, index=0)
+    # visual_index = visual_names.index(current_index)  # Get the index of the selected name
+    # st.image(compare_visuals[visual_index], caption=current_index)
 
     ## Michael verison
     st.title('En läringsprocess: Finns det en trend i vind hastighet över tid och går det att jämföra Göteborg och Säve?')
@@ -152,86 +141,31 @@ if nav == 'Vind':
     # wind direction Rose plots 
     vinddir_gbg_1 = "../plottar/windrose_all_winds_pre_1992_gbg.png"
     vinddir_gbg_2 = "../plottar/windrose_all_winds_post_1992_gbg.png"
-    vinddir_sav_1 = "../plottar/windrose_all_winds_pre_1978_save.png"
-    vinddir_sav_2 = "../plottar/windrose_all_winds_post_1978_save.png"
+    vinddir_sav_1 = "../plottar/windrose_all_winds_pre_1990_save.png"
+    vinddir_sav_2 = "../plottar/windrose_all_winds_post_1990_save.png"
     vinddir_vinga_1 = "../plottar/windrose_all_winds_pre_1978_vinga.png"
     vinddir_vinga_2 = "../plottar/windrose_all_winds_post_1978_vinga.png"
     '\n'
     '\n'
 
-    st.write('Förklaring av vindrosor:  \n0 grader: Norr  \n90 grader: Öst  \n180 grader: Syd  \n270 grader: Väst')
-    st.write('- Varje arm täcker 22.5 grader. Så armern rakt norrut täcker vindar från 348.75 grader till 11.25 grader')
-    st.write('- Cirklarna visar andelen av observationerna i procent.')
-    st.write('- Färgerna visar vindhastigheten')
-    st.write('- Automatiska proportioner')
-    
-    selected_location = st.selectbox("Select Location", ["GBG", "Säve", "Vinga"])
 
-        # Use if-else conditions to display the appropriate visuals
-    if selected_location == "GBG":
-        col1, col2 = st.columns(2)
-        with col1:
-            st.image(vinddir_gbg_1, caption="GBG Snittvindhastighet p/dag")
-        with col2:
-            st.image(vinddir_gbg_2, caption="GBG Snittvindhastighet p/dag")
-    elif selected_location == "Säve":
-        col1, col2 = st.columns(2)
-        with col1:
-            st.image(vinddir_sav_1, caption="Säve Snittvindhastighet p/dag")
-        with col2:
-            st.image(vinddir_sav_2, caption="Säve Snittvindhastighet p/dag")
-    elif selected_location == "Vinga":
-        col1, col2 = st.columns(2)
-        with col1:
-            st.image(vinddir_vinga_1, caption="Vinga Snittvindhastighet p/dag")
-        with col2:
-            st.image(vinddir_vinga_2, caption="Vinga Snittvindhastighet p/dag")
 
     #### Look at reliability
     '\n'
-    st.write('I Göteborgs-datan så mättes färre vindriktningar tidigare, men så är inte fallet med Säve och Vinga')
-    st.write('Göteborg har även luckor i sin data, så vi jämför bara Säve med Vinga. ')
-    st.write('Varför 1978?')
-    st.write('I vindrosorna ovan är det stora skillnader i Göteborg och även Vinga, men inte i Säve.  \nVi kan titta på antalet observationer över tid för att se om detta påverkar.')
 
-    no_meassurements_save = ('../Olof_viz/wind_meassurements_per_year_save.png')
-    no_meassurements_gbg = ('../Olof_viz/wind_meassurements_per_year_gbg.png')
-    no_meassurements_vinga = "../plottar/wind_meassurements_per_year_vinga.png"
-    st.image(no_meassurements_save, caption='Antalet mätningar per år är ungefär samma sedan 1960')
-    st.image(no_meassurements_gbg, caption='Drastisk skillnad i Göteborg')
-    st.image(no_meassurements_vinga, caption='Stor skilnad även på Vinga')
-    '\n'
+    
+
     
     #### Change of directions, all winds
-    st.write('Den enda riktningen där andelen vinddagar minskar är från 0 grader till 90 grader')
-    winds_from_NE_save = ('../Olof_viz/change_of_wind_0_90_save.png')
-    winds_from_NE_vinga = ('../Olof_viz/change_of_wind_0_90_vinga.png')
-    other_winds_save = '../plottar/wind_direction_changes_save_increases_collection.png'
-    st.image(winds_from_NE_save, caption='Andelen dagar med uppmätta vindar från 0-90, Säve')
-    st.image(other_winds_save, caption='Andra vindrisktningar ökar under perioden.')
-    st.write('Detta gäller dock inte Vinga')
-    st.image(winds_from_NE_vinga, caption='Andelen dagar med uppmätta vindar från 0-90, Vinga')
+    # st.write('Den enda riktningen där andelen vinddagar minskar är från 0 grader till 90 grader')
+    # winds_from_NE_save = ('../Olof_viz/change_of_wind_0_90_save.png')
+    # winds_from_NE_vinga = ('../Olof_viz/change_of_wind_0_90_vinga.png')
+    # other_winds_save = '../plottar/wind_direction_changes_save_increases_collection.png'
+    # st.image(winds_from_NE_save, caption='Andelen dagar med uppmätta vindar från 0-90, Säve')
+    # st.image(other_winds_save, caption='Andra vindrisktningar ökar under perioden.')
+    # st.write('Detta gäller dock inte Vinga')
+    # st.image(winds_from_NE_vinga, caption='Andelen dagar med uppmätta vindar från 0-90, Vinga')
 
-    #### Harder winds
-    st.title('Hårdare vindar')
-    hard_winds_over_time = ('../Olof_viz/hard_winds_over_time_comparison.png')
-    st.image(hard_winds_over_time)
-
-
-
-    hard_winds_over_time_save = "../plottar/hard_winds_save_barplot.png"
-    hard_winds_over_time_vinga = "../plottar/hard_winds_vinga_barplot.png"
-    st.image(hard_winds_over_time_save)
-    st.image(hard_winds_over_time_vinga)
-    st.write('Har de kraftigare vindarna ändrat riktning?')
-    hard_winds_save_pre_1978 = ('../plottar/windrose_hard_winds_pre_1978_save.png')
-    hard_winds_save_post_1978 = ('../plottar/windrose_hard_winds_post_1978_save.png')
-    col1, col2, = st.columns(2)
-    with col1: 
-        st.image(hard_winds_save_pre_1978)
-    with col2:
-        st.image(hard_winds_save_post_1978)
-    st.text('Slutsats: Större andel kraftiga vindar från söder, men överlag lägre hastigheter.')
 
 
     #### Correlation with buildings
@@ -263,7 +197,57 @@ if nav == 'Vind':
     
 
     st.image('../plottar/bygg_wind_sav_linear.png', width = 700)
+
+
     
+    selected_location = st.selectbox("Select Location", ["Säve", "Vinga"]) # Removed GBG
+
+        # Use if-else conditions to display the appropriate visuals
+    # if selected_location == "GBG":
+    #     col1, col2 = st.columns(2)
+    #     with col1:
+    #         st.image(vinddir_gbg_1, caption="GBG Snittvindhastighet p/dag")
+    #     with col2:
+    #         st.image(vinddir_gbg_2, caption="GBG Snittvindhastighet p/dag")
+    if selected_location == "Säve":
+        col1, col2 = st.columns(2)
+        with col1:
+            st.image(vinddir_sav_1, caption="Säve Snittvindhastighet p/dag")
+        with col2:
+            st.image(vinddir_sav_2, caption="Säve Snittvindhastighet p/dag")
+    elif selected_location == "Vinga":
+        col1, col2 = st.columns(2)
+        with col1:
+            st.image(vinddir_vinga_1, caption="Vinga Snittvindhastighet p/dag")
+        with col2:
+            st.image(vinddir_vinga_2, caption="Vinga Snittvindhastighet p/dag")
+
+    st.write('Förklaring av vindrosor:  \n0 grader: Norr  \n90 grader: Öst  \n180 grader: Syd  \n270 grader: Väst')
+    # st.write('- Varje arm täcker 22.5 grader. Så armern rakt norrut täcker vindar från 348.75 grader till 11.25 grader')
+    st.write('- Cirklarna visar andelen av observationerna i procent.')
+    st.write('- Färgerna visar vindhastigheten')
+    st.write('- Automatiska proportioner')
+    #### Harder winds
+    st.title('Hårdare vindar')
+    hard_winds_over_time = ('../Olof_viz/hard_winds_over_time_comparison.png')
+    st.image(hard_winds_over_time)
+
+
+
+    hard_winds_over_time_save = "../plottar/hard_winds_save_barplot.png"
+    hard_winds_over_time_vinga = "../plottar/hard_winds_vinga_barplot.png"
+    st.image(hard_winds_over_time_save)
+    st.image(hard_winds_over_time_vinga)
+    st.write('Har de kraftigare vindarna ändrat riktning?')
+    hard_winds_save_pre_1978 = ('../plottar/windrose_hard_winds_pre_1990_save.png')
+    hard_winds_save_post_1978 = ('../plottar/windrose_hard_winds_post_1990_save.png')
+    col1, col2, = st.columns(2)
+    with col1: 
+        st.image(hard_winds_save_pre_1978)
+    with col2:
+        st.image(hard_winds_save_post_1978)
+    st.write('Slutsats: Större andel kraftiga vindar från söder, men överlag lägre hastigheter.')
+    st.write('Ingen större skilnad i vindar från Göteborgs-hållet.')
 
 if nav == 'Temperatur':
     total_temps_plus_adjusted = ('../Olof_viz/medeltemperaturer.png')
