@@ -169,8 +169,8 @@ if nav == 'Vind':
     # snitt vindblås per dag, max vindblås per dag, snitt vindblås per månad
     st.header('Är vind minskning i Säve relaterad med byggnation i Göteborg?')
     
-    st.write("""Efter att vi hade kollat på vinddata i Göteborg och Säve märktes det att vindblås har sjunkit i sin krafighet över tiden. Vi har funderat på olika möjliga källor till denna försjunkning, som till exempel, klimatförändring. 
-               En annan hypotes som uppstod under vår analysprocess var att vindhastighetsminskningen kan bero på ökad byggnation i Göteborg. För att undersöka detta jämförde vi vinddata från Säve med SCBs "Färdigställda lägenheter och rumsenheter i nybyggda hus i Göteborg från 1975-2022" """)
+    st.write("""
+               En möjlig anledning till varför windblås minskar i Göteborg kan vara ökad byggnation. För att undersöka detta jämförde vi vinddata från Säve med SCBs "Färdigställda lägenheter och rumsenheter i nybyggda hus i Göteborg från 1975-2022" """)
     
     st.header("""Bygnationsdata
         """)
@@ -185,11 +185,8 @@ if nav == 'Vind':
     
     st.image('../plottar/reg_results_sav_bygg_linear.png', width = 700)
 
-    st.write("""Resultatet visar att en lineärregression model är signifikant (p = 0,0248) med en R-squared värde av 16,7%. Kumulativt antal lägenheter koefficienten var signifikant (p = 0,025) och är relaterad till en 0,00000377 °C årlig minskning i snitttemperatur i genomsnitt. 
-             Det verkar som relationen är dock heteroskedastic. Detta står i konflikt med OLS-antagandet om homoskedasticitet. 
-    """)
-    st.write("""Det kan emellertid finnas utrymme för tolkning som skulle förklara detta heteroskedastiska beteende. Eftersom en lägre mängd bostäder skulle påverka vinden mindre, kan variationsnivån därför variera kraftigt. 
-             Verkligen kan vinden vissa år vara lägre eller högre baserat på många andra faktorer. Dock, när byggnadsnivåerna ökar, ökar även mängden vindhinder, vilket gör att högre vindhastigheter är mindre troliga att registreras, vilket förklarar det tydligare sambandet mellan byggnadsnivåer och vindhastigheter när byggnadsnivåerna ökar.
+    st.write("""Kumulativt antal lägenheter koefficienten är relaterad till 16,7% av den förändringen i vindblås i Säve. Byggnation är relaterad till en 0,00000377 °C årlig minskning i snitttemperatur.
+             
     """)
     
 
@@ -244,17 +241,16 @@ if nav == 'Relationen mellan nederbörd & temperatur':
     st.image("../plottar/histogram_temp_nederbörd.png", width=700)
     st.write("Månatlig genomsnittstemperatur versus total månatlig nederbörd:")
     st.image("../plottar/scatter_temp_nederbörd.png", width = 700)
-    st.write("Scatterplottan för månatlig genomsnittstemperatur gentemot total månatlig nederbörd visar ett möjligt heteroskedastiskt förhållande. Det verkar som att när snittemperatur är låg, är även total nederbörd låg. När den genomsnittliga temperaturen stiger, ökar omfånget av total månatlig nederbörd. När den genomsnittliga månadstemperaturen når cirka 0 till 2 °C, verkar förhållandet mellan de två variablerna helt okorrelerat, om inte visar en svagt positiv korrelation.")
+    st.write("Scatterplottan för månatlig genomsnittstemperatur gentemot total månatlig nederbörd visar ett möjligt heteroskedastiskt förhållande.  När den genomsnittliga temperaturen stiger, ökar omfånget av total månatlig nederbörd. ")
     st.header("Regression")
     st.write("En OLS-linjär regression används för att uttrycka förhållandet mellan genomsnittlig månadstemperatur och månatlig total nederbörd.")
-    st.write("Den enkla ekvationen är: y = a + b * x + C")
-    st.write(" Vid första anblicken verkar variablerna kunna ha potentiellt oroväckande egenskaper för att köra en OLS. Som tidigare nämnts förefaller det finnas heteroskedasticitet. Därför används robust kovarians för att hjälpa till att rätta till koefficienterna för heteroskedasticitet.")
+    st.write("Ekvationen är: y = a + b * x + C")
     st.image("../plottar/reg_results_ned_temp.png", width = 700)
     st.image("../plottar/scatter_trendline_temp_ned.png", width=700)
     st.write("""
-    Den linjära OLS-modellen är statistiskt signifikant med en F-poäng på 26,04 (p = 4,04e-07). R-torget är 2,25%. Koefficienterna är en intercep för 60,955 (p = 0,000) och koefficienten för månatlig genomsnittstemperatur är 0,89 (p = 0,000).
-    Detta resultat tyder på att genomsnittlig månadstemperaturdata är signifikant relaterad till 2,5% av förändringen i total månatlig nederbörd i datasetet. Det är inte mycket, men det kan ha konsekvenser att säga att temperaturen har en viss liten prediktiv korrelation med nederbördsvolymerna. Det föreslår att i denna dataset är en ökning med en enhet i temperaturen relaterad till en ökning av 0,8956 mm i nederbörd.
-    Som syns i spridningsdiagrammet är trendlinjen inte brant. Det är möjligt att överväga att den positiva lutningen kan relatera till den initiala positiva förändringen vid lägre temperaturer och även det möjligtvis heteroskedastiska förhållandet som verkar finnas i hela datasetet.""")
+   
+    Snitt månadstemperatur är signifikant relaterad till 2,5% av förändringen i total månatlig nederbörd. Det föreslår att en ökning med en enhet i temperaturen är relaterad till en ökning av 0,8956 mm i nederbörd.
+    """)
    
 
 if nav == 'Sommarens och vinterns ankomst':
