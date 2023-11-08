@@ -36,10 +36,8 @@ if nav == 'Bakgrund':
     st.text('''1. Kan man med hjälp av historisk väderdata se trender kring förändringar i vädret?
             
             \nHur har temperaturen ändrats sedan första datan?
-            \nHar regn blivit mer intensivt under de senaste 50 åren? (Definiera intensivt)
-	        \nFlera dagar med regn? Har totala nederbörden ökat/minskat mellan åren?
-            \nHar åskoväder och stormar blivit mer intensiva under de senaste 50 åren? - sekundär
-            \nHur har snödjupet ändrats över tid? 
+            \nRegnar det mer eller mindre nu än förr?
+            \nHar det blivit någon förändring med snödjup?
             \nKan vi förutspå hur vädret ser ut i till exempel juli 2028?''')
 
 
@@ -139,20 +137,19 @@ if nav == 'Snödjup':
     st.subheader('Information om datan')
     st.write(f"""Snödjupet är mätt på Säve mätstation som ligger vid Säve flygplats. Datan är insamlad mellan januari 1944 och december 2003 och mäts i meter.
              \nDet är lite glapp i informationen.""")
-    if st.checkbox('Visa antal observationer per år.'):
+    if st.checkbox('Visa antal mätningar per år.'):
         st.write(snodjup.Year.value_counts())
     st.subheader("""Hur ser det ut egentligen med snö över tid?""")
-    st.write("Snödjup i meter")
-    st.write(f"Minsta snödjup: {snodjup['Snödjup'].min()}m")
-    st.write(f"Medelsnödjup över alla år: {round(snodjup['Snödjup'].mean(),3)}m")
-    st.write(f"Max uppmätta snödjupet: {snodjup['Snödjup'].max()}m")
-    st.subheader('Vi tittar på perioden då det snöar.')
-    st.image("../plottar/snodjuppermånad.png")
-    st.write("""Det är ju rimligt att snö-observationerna är mellan januari och maj och oktober och december då det inte snöar under sommaren.""")
-    st.write("Hur ligger det då till med snödjupet när det väl snöar en period?")
-    st.image("../plottar/snöperperiod.png")
-    st.write('Som vi ser här är det inte så konstigt att det ligger mer snö på marken i slutet av perioden egentligen.')
-    st.write("Hur har det sett ut genom åren?")
+    # st.write(f"Minsta snödjup: {snodjup['Snödjup'].min()}m")
+    # st.write(f"Medelsnödjup över alla år: {round(snodjup['Snödjup'].mean(),3)}m")
+    # st.write(f"Max uppmätta snödjupet: {snodjup['Snödjup'].max()}m")
+    # st.subheader('Vi tittar på perioden då det snöar.')
+    # st.image("../plottar/snodjuppermånad.png")
+    # st.write("""Det är ju rimligt att snö-observationerna är mellan januari och maj och oktober och december då det inte snöar under sommaren.""")
+    # st.write("Hur ligger det då till med snödjupet när det väl snöar en period?")
+    # st.image("../plottar/snöperperiod.png")
+    # st.write('Som vi ser här är det inte så konstigt att det ligger mer snö på marken i slutet av perioden egentligen.')
+    # st.write("Hur har det sett ut genom åren?")
     st.image("../plottar/totalsnödjup.png")
     st.write("Det verkar ju onekligen som att det är mindre snö på marken efter 90-talet jämfört med exempelvis 80-talet.")
 
@@ -175,10 +172,9 @@ if nav == 'Nederbörd':
     st.subheader('Hur ser det ut med nederbörden?')
     st.image("../plottar/snittnederbördövertid.png")
     st.write("""Enligt grafen så verkar det pendla en del mellan åren, men det verkar ju som att det snittnederbörden ökar över tid.
-             Vi kan dubbelkolla detta genom att göra en plot med en trendlinje som med enkel linjär regression räknar ut ett samband mellan genomsnitssregnfall och datum. 
-             \nNågonting hände där vid 2008, kan vi se när det blev av?""")
-    st.image("../plottar/regn200808.png")
-    st.write('Där ser vi att det regnade som fasen den 27e augusti.')
+             Vi kan dubbelkolla detta genom att göra en plot med en trendlinje som med enkel linjär regression räknar ut ett samband mellan genomsnitssregnfall och datum.""")
+    # st.image("../plottar/regn200808.png")
+    # st.write('Där ser vi att det regnade som fasen den 27e augusti.')
     st.image("../plottar/regnperår.png")
     st.write("""Vi ser ju klart och tydligt att det trendar till att det regnar mer i dagsläget än på 50-talet. 
              Visserligen är det inte mycket, men tillräckligt mycket för att visas på en graf.
