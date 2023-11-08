@@ -268,25 +268,69 @@ if nav == 'Vind':
 if nav == 'Temperatur':
     total_temps_plus_adjusted = ('../Olof_viz/medeltemperaturer.png')
     temp_diff = ('../Olof_viz/temp_diff_gbg_save.png')
-    unadjusted = ('../Olof_viz/medeltemp_ojusterad.png')
-    adjusted = ('../Olof_viz/medeltemp_justerad.png')
+    medeltemp = ('../plottar/medeltemp_sammanslaget.png')
     both_datasets_compared = ('../plottar/temp_skilnad_snitt_gbg_save_resp_dataset.png')
-    st.title('EDA')
+    st.title('Temperaturdata')
     st.text('Data för Säve: 1944-2006 \nData för Göteborg: 1961 ->')
-    st.image(both_datasets_compared, caption='Snabb jämförelse mellan snittemperaturer för båda dataseten')
-    st.write('''Det är i snitt lite varmare i städer. Om vi vill komplettera Säve-datan med data från Göteborg borde vi därför justera något av dataseten så att det blir lite mer
+    st.write('Sätter vi samman dataseten får vi mycket längre spann att titta på.')
+    temps_meassures_gbg = ('../plottar/temp_meassurements_gbg.png')
+    temps_meassures_save = ('../plottar/temp_meassurements_save.png')
+
+    col1, col2 = st.columns([0.7, 0.3])
+    with col1:
+        st.image(temps_meassures_gbg)
+    with col2:
+        st.write('Saknas det dagar?')
+        '\n'
+        st.write('GÖTEBORG')
+        df_gbg = pd.read_pickle('../Dataframes/df_daily_temp_gbg.pkl')
+        def get_no_meassures_per_year_temp_gbg(year):
+            if (len(df_gbg[df_gbg['Year'] == year]) < 365) and (len(df_gbg[df_gbg['Year'] == year]) > 0):
+                days = len(df_gbg[df_gbg['Year'] == year])
+                return f'{year} mättes {days} dagar'
+            else:
+                pass
+        for i in range(1961, 2023):
+            ret = get_no_meassures_per_year_temp_gbg(i)
+            if ret == None:
+                pass
+            else:
+                st.write(ret)
+
+
+    '\n'
+    with col1:
+        st.image(temps_meassures_save)
+    with col2:
+        '\n'
+        '\n'
+        st.write('SÄVE')
+        df_save = pd.read_pickle('../Dataframes/df_daily_temp_save.pkl')
+        def get_no_meassures_per_year_temp_save(year):
+            if len(df_save[df_save['Year'] == year]) < 365 and len(df_save[df_save['Year'] == year]) > 0:
+                days = len(df_save[df_save['Year'] == year])
+                return f'{year} mättes {days} dagar'
+            else:
+                pass
+        for i in range(1961, 2007):
+            ret = get_no_meassures_per_year_temp_save(i)
+            if ret == None:
+                pass
+            else:
+                st.write(ret)
+    st.write('Med tanke på luckorna i datasetet för Göteborg bestämde vi oss för att lägga på Göteborgsdatan där Säve-mätningarna tog slut, 2006.')
+    
+    st.write('''Det är i snitt lite varmare i städer ([SMHI](https://www.smhi.se/forskning/forskningsenheter/meteorologi/varme-och-luftmiljo-i-stader/hogre-temperaturer-i-staden-1.160049)). 
+             Om vi vill komplettera Säve-datan med data från Göteborg borde vi därför justera något av dataseten så att det blir lite mer
              rättvisande. Annars kan snittemperaturen stiga drastisk när vi tar data från Göteborg, 
              utan att det nödvändigtvis var varmare.''')
+    st.image(both_datasets_compared, caption='Snabb jämförelse mellan snittemperaturer för båda dataseten')
     
     st.image(temp_diff, caption='''Skillnader i månadstemperatur mellan Görborg och Säve under den överlappande perioden 1961 till 2006. 
-             Visar hur mycket varmare/kallare Göteborg var än Säve. Vid positivt tal var Göteborg varmare''')
-    
+             Visar temperatur i Göteborg minus temperatur i Säve''')
+    st.write('Temperaturer justerat efter månadssnitten ovan.')
+    st.image(medeltemp)
 
-    col1, col2 = st.columns(2)
-    with col1:
-        st.image(unadjusted, caption='Sammansatt dataset av data från Säve fram till 2006.')
-    with col2:
-        st.image(adjusted, caption='Justerat dataset, där temperaturerna från 2006 och framåt justerats enligt resultaten ovan')
 
 
 if nav == 'Sommarens och vinterns ankomst':
@@ -297,6 +341,11 @@ if nav == 'Sommarens och vinterns ankomst':
     '\n'
     '\n'
     '\n'
-    st.title('Sommarens anskomst')
-    summer_arrival = ('summer_arrival_adjusted_comp.png')
-    st.image(summer_arrival, width=1000)
+    st.title('Sommarens ankomst')
+    summer_arrival = ('../plottar/summer_arrivals.png')
+    st.image(summer_arrival)
+    df = pd.read_pickle('../Dataframes/summer_days_diff.pkl')
+    st.table(df)
+    st.write('I snitt skiljer det 4.8 dagar mellan justerad och ojusterad temperatur.')
+    summer_arrival_trendline = ('../plottar/summer_arrivals_trendline.png')
+    st.image(summer_arrival_trendline, caption='I snitt ankommer sommaren 5e Maj')
