@@ -33,7 +33,6 @@ nav = st.sidebar.radio('Huvudmeny', ['Bakgrund', 'Frågeställning', 'EDA', 'Pla
 
 if nav == 'Bakgrund':
 
-    st.title('Jasså, det vill du allt bra veta va?')
     st.text('''1. Kan man med hjälp av historisk väderdata se trender kring förändringar i vädret?
             
             \nHur har temperaturen ändrats sedan första datan?
@@ -200,22 +199,28 @@ if nav == 'Nederbörd':
               """)
 
 if nav == 'Vind':
-    st.title('Överblick över wind data')
-    st.write("""Som i de andra exempel tänkte vi konkatenera Säve och Göteborgs data för att kunna få en datamängd som sträckte sig över en längre period, från 1944 till 2023. Med knapparna nedan kan man se varenda plotta och sedan Göteborg och Säve data sammanställt. 
-            """)
-    
-    # Meta knappar: välj mellan säve, Göteborg, Säve & Göteborg
+    #### Overview
+
+    st.title('Överblick över vind-data ')
+
+    st.write('"Den vindhastighet som meteorologen anger i prognoser och flertalet av våra mätningar avser ett medelvärde under 10 minuter av vindhastigheten på 10 meters höjd ovan markytan." /SMHI')
+    st.write("""Som i de andra exempel har vi konkatenerat Säve och Göteborgs data för att kunna ha data från 1944 till 2023. Med knapparna nedan kan man skrolla igenom 
+             """)
+    # knappar där man kan kolla på till exempel Säve data, Göteborgs data 
+        # Meta knappar: välj mellan säve, Göteborg, Säve & Göteborg
     vind_1 = "../plottar/mean_wind_daily_gbg.png"
     vind_2 = "../plottar/mean_wind_daily_sv.png"
     vind_3 = "../plottar/mean_wind_daily_sv_gt.png"
+    
     compare_visuals = [ vind_1, vind_2, vind_3]
 
     visual_names = ["GBG Snittvindhastighet p/dag", "Säve Snittvindhastighet p/dag", "GBG, Säve sammanlagt, Snittvindhastighet p/dag"]
     # Display the current visual based on a user-selected name
-    current_index = st.selectbox("Välj stationen", visual_names, index=0)
+    current_index = st.selectbox("Select Visual", visual_names, index=0)
     visual_index = visual_names.index(current_index)  # Get the index of the selected name
     st.image(compare_visuals[visual_index], caption=current_index)
-    
+
+    ## Michael verison
     st.title('En läringsprocess: Finns det en trend i vind hastighet över tid och går det att jämföra Göteborg och Säve?')
 
     st.write("""När vi tittade på den sammanställda snittvindhästighets datamängden från Säve/Göteborg trodde vi först att det visades en negativ trend i Göteborg/Säves vindhastighet övertid.
@@ -225,19 +230,26 @@ if nav == 'Vind':
     st.write("""När vi försökte ta reda på varför vindhastigheten hade minskat i Göteborg/Säve data mängden påstådde vi att byggnation i Göteborg över tid skulle kunna stå för den minskning. 
                 """)
 
+    ## Olof version
+    st.write("""När vi tittar på vinddata över tid märker vi en minskning av den genomsnittliga vindhastigheten per dag.
+                Låt oss börja med att undersöka hur vindhastigheten har förändrats beroende på vindriktningen.
+             """)
     
-
-
-    # intensitivitet över tiden 
-
-
     # wind direction Rose plots 
-    vinddir_gbg_1 = "../plottar/wind_dir_gbg_pre1980.png"
-    vinddir_gbg_2 = "../plottar/wind_dir_gbg_post1980.png"
-    vinddir_sav_1 = "../plottar/wind_dir_sav_pre1980.png"
-    vinddir_sav_2 = "../plottar/wind_dir_sav_post1980.png"
-    
-    selected_location = st.selectbox("Välj stationen", ["GBG", "Säve"])
+    vinddir_gbg_1 = "../plottar/windrose_all_winds_pre_1992_gbg.png"
+    vinddir_gbg_2 = "../plottar/windrose_all_winds_post_1992_gbg.png"
+    vinddir_sav_1 = "../plottar/windrose_all_winds_pre_1978_save.png"
+    vinddir_sav_2 = "../plottar/windrose_all_winds_post_1978_save.png"
+    vinddir_vinga_1 = "../plottar/windrose_all_winds_pre_1978_vinga.png"
+    vinddir_vinga_2 = "../plottar/windrose_all_winds_post_1978_vinga.png"
+    '\n'
+    '\n'
+
+    st.write('Förklaring av vindrosor:  \n0 grader: Norr  \n90 grader: Öst  \n180 grader: Syd  \n270 grader: Väst')
+    st.write('Varje arm täcker 22.5 grader. Så armern rakt norrut täcker vindar från 348.75 grader till 11.25 grader')
+    st.write('Cirklarna visar andelen av observationerna i procent.')
+    st.write('Färgerna visar vindhastigheten')
+    selected_location = st.selectbox("Select Location", ["GBG", "Säve", "Vinga"])
 
         # Use if-else conditions to display the appropriate visuals
     if selected_location == "GBG":
@@ -245,33 +257,56 @@ if nav == 'Vind':
         with col1:
             st.image(vinddir_gbg_1, caption="GBG Snittvindhastighet p/dag")
         with col2:
-            st.image(vinddir_gbg_2, caption="Säve Snittvindhastighet p/dag")
+            st.image(vinddir_gbg_2, caption="GBG Snittvindhastighet p/dag")
     elif selected_location == "Säve":
         col1, col2 = st.columns(2)
         with col1:
-            st.image(vinddir_sav_1, caption="GBG Snittvindhastighet p/dag")
+            st.image(vinddir_sav_1, caption="Säve Snittvindhastighet p/dag")
         with col2:
             st.image(vinddir_sav_2, caption="Säve Snittvindhastighet p/dag")
+    elif selected_location == "Vinga":
+        col1, col2 = st.columns(2)
+        with col1:
+            st.image(vinddir_vinga_1, caption="Vinga Snittvindhastighet p/dag")
+        with col2:
+            st.image(vinddir_vinga_2, caption="Vinga Snittvindhastighet p/dag")
+
+    #### Look at reliability
+    '\n'
+    st.write('I Göteborgs-datan så mättes färre vindriktningar tidigare, men så är inte fallet med Säve och Vinga')
+    st.write('I vindrosorna ovan är det stora skillnader i Göteborg och även Vinga, men inte i Säve.  \nVi kan titta på antalet observationer över tid för att se om detta påverkar.')
+
+    no_meassurements_save = ('../Olof_viz/wind_meassurements_per_year_save.png')
+    no_meassurements_gbg = ('../Olof_viz/wind_meassurements_per_year_gbg.png')
+    no_meassurements_vinga = "../plottar/wind_meassurements_per_year_vinga.png"
+    st.image(no_meassurements_save, caption='Antalet mätningar per år är ungefär samma sedan 1960')
+    st.image(no_meassurements_gbg, caption='Drastisk skillnad i Göteborg')
+    st.image(no_meassurements_vinga, caption='Stor skilnad även på Vinga')
+    '\n'
     
-    # compare_dir = [ vinddir_gbg_1, vinddir_gbg_2]
-    # visual_names_dir = ["GBG Snittvindhastighet p/dag", "Säve Snittvindhastighet p/dag", "GBG, Säve sammanlagt, Snittvindhastighet p/dag"]
-    # # Display the current visual based on a user-selected name
-    # current_index_dir = st.selectbox("Select Visual", visual_names_dir, index=0)
-    # visual_index_dir = visual_names_dir.index(current_index_dir)  # Get the index of the selected name
-    # st.image(compare_dir[visual_index_dir], caption=current_index_dir)
-    
+    #### Change of directions, all winds
+    st.write('Den enda riktningen där andelen vinddagar minskar är från 0 grader till 90 grader')
+    winds_from_NE_save = ('../Olof_viz/change_of_wind_0_90_save.png')
+    winds_from_NE_vinga = ('../Olof_viz/change_of_wind_0_90_vinga.png')
+    st.image(winds_from_NE_save, caption='Andelen dagar med uppmätta vindar från 0-90, Säve')
+    st.write('Detta gäller dock inte Vinga')
+    st.image(winds_from_NE_vinga, caption='Andelen dagar med uppmätta vindar från 0-90, Vinga')
+
+    #### Harder winds
+    st.title('Hårdare vindar')
+    hard_winds_over_time = ('../Olof_viz/hard_winds_over_time_comparison.png')
+    st.image(hard_winds_over_time)
 
 
 
-    
-
-    # Display the visuals
-    # st.image(vind_1, caption='Visual 1')
-    # st.image(vind_2, caption='Visual 2')
-    # st.image(vind_3, caption='Visual 3')
+    hard_winds_over_time_save = "../plottar/hard_winds_save_barplot.png"
+    hard_winds_over_time_vinga = "../plottar/hard_winds_vinga_barplot.png"
+    st.image(hard_winds_over_time_save)
+    st.image(hard_winds_over_time_vinga)
 
 
-        # snitt vindblås per dag, max vindblås per dag, snitt vindblås per månad
+    #### Correlation with buildings
+
     st.header('Är vind minskning i Säve relaterad med byggnation i Göteborg?')
     
     st.write("""Efter att vi hade kollat på vinddata i Göteborg och Säve märktes det att vindblås har sjunkit i sin krafighet över tiden. Vi har funderat på olika möjliga källor till denna försjunkning, som till exempel, klimatförändring. 
@@ -306,12 +341,12 @@ if nav == 'Temperatur':
     temp_diff = ('../Olof_viz/temp_diff_gbg_save.png')
     unadjusted = ('../Olof_viz/medeltemp_ojusterad.png')
     adjusted = ('../Olof_viz/medeltemp_justerad.png')
-    both_datasets_compared = ('../Olof_viz/temp_skilnad_snitt_gbg_save_resp_dataset.png')
+    both_datasets_compared = ('../plottar/temp_skilnad_snitt_gbg_save_resp_dataset.png')
     st.title('EDA')
     st.text('Data för Säve: 1944-2006 \nData för Göteborg: 1961 ->')
     st.image(both_datasets_compared, caption='Snabb jämförelse mellan snittemperaturer för båda dataseten')
     st.write('''Det är i snitt lite varmare i städer. Om vi vill komplettera Säve-datan med data från Göteborg borde vi därför justera något av dataseten så att det blir lite mer
-             rättvisande. Annars kan snittemperaturen stiga drastisk när vi tar data från Göteborg, Annars kan snittemperaturen stiga drastisk när vi tar data från Göteborg, 
+             rättvisande. Annars kan snittemperaturen stiga drastisk när vi tar data från Göteborg, 
              utan att det nödvändigtvis var varmare.''')
     
     st.image(temp_diff, caption='''Skillnader i månadstemperatur mellan Görborg och Säve under den överlappande perioden 1961 till 2006. 
@@ -322,29 +357,8 @@ if nav == 'Temperatur':
     with col1:
         st.image(unadjusted, caption='Sammansatt dataset av data från Säve fram till 2006.')
     with col2:
-        st.image(adjusted, caption='Justerat dataset, där temperaturerna från 2006 och framåt justerats enlit resultaten ovan')
+        st.image(adjusted, caption='Justerat dataset, där temperaturerna från 2006 och framåt justerats enligt resultaten ovan')
 
-if nav == 'Relationen mellan nederbörd & temperatur':
-    st.title("Relationen mellan nederbörd & temperatur")
-    st.write("På tidigare sidor har vi utforskat både temperatur och nederbörd i detalj. Syftet med denna sida är att upptäcka hur de två samverkar över tiden")
-    st.header("Summary Statistics:")
-    st.image("../plottar/sum_stat_temp_nederbörd.png", width=400)
-    st.write("Histogram för både genomsnittlig månadstemperatur och total månatlig nederbörd:")
-    st.image("../plottar/histogram_temp_nederbörd.png", width=700)
-    st.write("Månatlig genomsnittstemperatur versus total månatlig nederbörd:")
-    st.image("../plottar/scatter_temp_nederbörd.png", width = 700)
-    st.write("Scatterplottan för månatlig genomsnittstemperatur gentemot total månatlig nederbörd visar ett möjligt heteroskedastiskt förhållande. Det verkar som att när snittemperatur är låg, är även total nederbörd låg. När den genomsnittliga temperaturen stiger, ökar omfånget av total månatlig nederbörd. När den genomsnittliga månadstemperaturen når cirka 0 till 2 °C, verkar förhållandet mellan de två variablerna helt okorrelerat, om inte visar en svagt positiv korrelation.")
-    st.header("Regression")
-    st.write("En OLS-linjär regression används för att uttrycka förhållandet mellan genomsnittlig månadstemperatur och månatlig total nederbörd.")
-    st.write("Den enkla ekvationen är: y = a + b * x + C")
-    st.write(" Vid första anblicken verkar variablerna kunna ha potentiellt oroväckande egenskaper för att köra en OLS. Som tidigare nämnts förefaller det finnas heteroskedasticitet. Därför används robust kovarians för att hjälpa till att rätta till koefficienterna för heteroskedasticitet.")
-    st.image("../plottar/reg_results_ned_temp.png", width = 700)
-    st.image("../plottar/scatter_trendline_temp_ned.png", width=700)
-    st.write("""
-    Den linjära OLS-modellen är statistiskt signifikant med en F-poäng på 26,04 (p = 4,04e-07). R-torget är 2,25%. Koefficienterna är en intercep för 60,955 (p = 0,000) och koefficienten för månatlig genomsnittstemperatur är 0,89 (p = 0,000).
-    Detta resultat tyder på att genomsnittlig månadstemperaturdata är signifikant relaterad till 2,5% av förändringen i total månatlig nederbörd i datasetet. Det är inte mycket, men det kan ha konsekvenser att säga att temperaturen har en viss liten prediktiv korrelation med nederbördsvolymerna. Det föreslår att i denna dataset är en ökning med en enhet i temperaturen relaterad till en ökning av 0,8956 mm i nederbörd.
-    Som syns i spridningsdiagrammet är trendlinjen inte brant. Det är möjligt att överväga att den positiva lutningen kan relatera till den initiala positiva förändringen vid lägre temperaturer och även det möjligtvis heteroskedastiska förhållandet som verkar finnas i hela datasetet.""")
-   
 
 if nav == 'Sommarens och vinterns ankomst':
     st.title('Sommarens och vinterns ankomst')
