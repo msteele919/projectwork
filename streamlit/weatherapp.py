@@ -160,9 +160,11 @@ if nav == 'Vind':
     '\n'
 
     st.write('Förklaring av vindrosor:  \n0 grader: Norr  \n90 grader: Öst  \n180 grader: Syd  \n270 grader: Väst')
-    st.write('Varje arm täcker 22.5 grader. Så armern rakt norrut täcker vindar från 348.75 grader till 11.25 grader')
-    st.write('Cirklarna visar andelen av observationerna i procent.')
-    st.write('Färgerna visar vindhastigheten')
+    st.write('- Varje arm täcker 22.5 grader. Så armern rakt norrut täcker vindar från 348.75 grader till 11.25 grader')
+    st.write('- Cirklarna visar andelen av observationerna i procent.')
+    st.write('- Färgerna visar vindhastigheten')
+    st.write('- Automatiska proportioner')
+    
     selected_location = st.selectbox("Select Location", ["GBG", "Säve", "Vinga"])
 
         # Use if-else conditions to display the appropriate visuals
@@ -188,6 +190,8 @@ if nav == 'Vind':
     #### Look at reliability
     '\n'
     st.write('I Göteborgs-datan så mättes färre vindriktningar tidigare, men så är inte fallet med Säve och Vinga')
+    st.write('Göteborg har även luckor i sin data, så vi jämför bara Säve med Vinga. ')
+    st.write('Varför 1978?')
     st.write('I vindrosorna ovan är det stora skillnader i Göteborg och även Vinga, men inte i Säve.  \nVi kan titta på antalet observationer över tid för att se om detta påverkar.')
 
     no_meassurements_save = ('../Olof_viz/wind_meassurements_per_year_save.png')
@@ -202,7 +206,9 @@ if nav == 'Vind':
     st.write('Den enda riktningen där andelen vinddagar minskar är från 0 grader till 90 grader')
     winds_from_NE_save = ('../Olof_viz/change_of_wind_0_90_save.png')
     winds_from_NE_vinga = ('../Olof_viz/change_of_wind_0_90_vinga.png')
+    other_winds_save = '../plottar/wind_direction_changes_save_increases_collection.png'
     st.image(winds_from_NE_save, caption='Andelen dagar med uppmätta vindar från 0-90, Säve')
+    st.image(other_winds_save, caption='Andra vindrisktningar ökar under perioden.')
     st.write('Detta gäller dock inte Vinga')
     st.image(winds_from_NE_vinga, caption='Andelen dagar med uppmätta vindar från 0-90, Vinga')
 
@@ -217,6 +223,15 @@ if nav == 'Vind':
     hard_winds_over_time_vinga = "../plottar/hard_winds_vinga_barplot.png"
     st.image(hard_winds_over_time_save)
     st.image(hard_winds_over_time_vinga)
+    st.write('Har de kraftigare vindarna ändrat riktning?')
+    hard_winds_save_pre_1978 = ('../plottar/windrose_hard_winds_pre_1978_save.png')
+    hard_winds_save_post_1978 = ('../plottar/windrose_hard_winds_post_1978_save.png')
+    col1, col2, = st.columns(2)
+    with col1: 
+        st.image(hard_winds_save_pre_1978)
+    with col2:
+        st.image(hard_winds_save_post_1978)
+    st.text('Slutsats: Större andel kraftiga vindar från söder, men överlag lägre hastigheter.')
 
 
     #### Correlation with buildings
