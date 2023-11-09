@@ -601,14 +601,6 @@ if nav == 'Temperatur prediktion':
     st.write('Att extrapolera modellen över tid. Vad blir temperaturen om 20 år?')
     st.image('../plottar/pred_temperature_till_2042.png', width=700)
     st.write('Modellen fångar en svag ökning i snitt temperatur över tiden. Den prediktera att snitt temperaturen i Juli 2042 blir 18,68°C, uppe från 18,43°C i Juli 2022')
-
-
-    
-
-
-    
-
-
 if nav == 'Relationen mellan nederbörd & temperatur':
     st.title("Relationen mellan nederbörd & temperatur")
     st.write("På tidigare sidor har vi utforskat både temperatur och nederbörd i detalj. Syftet med denna sida är att upptäcka hur de två samverkar över tiden")
