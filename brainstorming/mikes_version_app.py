@@ -120,10 +120,10 @@ if nav == 'Vind':
     # Meta knappar: välj mellan säve, Göteborg, Säve & Göteborg
     vind_1 = "../plottar/mean_wind_daily_gbg.png"
     vind_2 = "../plottar/mean_wind_daily_sv.png"
-    vind_3 = "../plottar/mean_wind_daily_sv_gt.png"
+    vind_3 = "../plottar/mean_wind_daily_vinga.png"
     compare_visuals = [ vind_1, vind_2, vind_3]
 
-    visual_names = ["GBG Snittvindhastighet p/dag", "Säve Snittvindhastighet p/dag", "GBG, Säve sammanlagt, Snittvindhastighet p/dag"]
+    visual_names = ["GBG Snittvindhastighet p/dag", "Säve Snittvindhastighet p/dag", "Vinga Snittvindhastighet p/dag"]
     # Display the current visual based on a user-selected name
     current_index = st.selectbox("Välj stationen", visual_names, index=0)
     visual_index = visual_names.index(current_index)  # Get the index of the selected name
@@ -139,32 +139,6 @@ if nav == 'Vind':
                 """)
 
     
-
-
-    # intensitivitet över tiden 
-
-
-    # wind direction Rose plots 
-    vinddir_gbg_1 = "../plottar/wind_dir_gbg_pre1980.png"
-    vinddir_gbg_2 = "../plottar/wind_dir_gbg_post1980.png"
-    vinddir_sav_1 = "../plottar/wind_dir_sav_pre1980.png"
-    vinddir_sav_2 = "../plottar/wind_dir_sav_post1980.png"
-    
-    selected_location = st.selectbox("Välj stationen", ["GBG", "Säve"])
-
-        # Use if-else conditions to display the appropriate visuals
-    if selected_location == "GBG":
-        col1, col2 = st.columns(2)
-        with col1:
-            st.image(vinddir_gbg_1, caption="GBG Snittvindhastighet p/dag")
-        with col2:
-            st.image(vinddir_gbg_2, caption="Säve Snittvindhastighet p/dag")
-    elif selected_location == "Säve":
-        col1, col2 = st.columns(2)
-        with col1:
-            st.image(vinddir_sav_1, caption="GBG Snittvindhastighet p/dag")
-        with col2:
-            st.image(vinddir_sav_2, caption="Säve Snittvindhastighet p/dag")
 
     # snitt vindblås per dag, max vindblås per dag, snitt vindblås per månad
     st.header('Är vind minskning i Säve relaterad med byggnation i Göteborg?')

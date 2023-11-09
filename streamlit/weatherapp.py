@@ -206,31 +206,54 @@ if nav == 'Vind':
         # Meta knappar: välj mellan säve, Göteborg, Säve & Göteborg
     vind_1 = "../plottar/mean_wind_daily_gbg.png"
     vind_2 = "../plottar/mean_wind_daily_sv.png"
-    vind_3 = "../plottar/mean_wind_daily_sv_gt.png"
+    vind_3 = "../plottar/mean_wind_daily_vinga.png"
     
     compare_visuals = [ vind_1, vind_2, vind_3]
 
-    visual_names = ["GBG Snittvindhastighet p/dag", "Säve Snittvindhastighet p/dag", "GBG, Säve sammanlagt, Snittvindhastighet p/dag"]
+    visual_names = ["GBG Snittvindhastighet p/dag", "Säve Snittvindhastighet p/dag", "Vinga Snittvindhastighet p/dag"]
     # Display the current visual based on a user-selected name
     current_index = st.selectbox("Select Visual", visual_names, index=0)
     visual_index = visual_names.index(current_index)  # Get the index of the selected name
     st.image(compare_visuals[visual_index], caption=current_index)
 
-    ## Michael verison
-    st.title('En läringsprocess: Finns det en trend i vind hastighet över tid och går det att jämföra Göteborg och Säve?')
-
-    st.write("""När vi tittade på den sammanställda snittvindhästighets datamängden från Säve/Göteborg trodde vi först att det visades en negativ trend i Göteborg/Säves vindhastighet övertid.
-            """)
-    st.write("""Var detta en välgrundad slutsats? Följ med på vår journey och ta reda på det""")
-
-    st.write("""När vi försökte ta reda på varför vindhastigheten hade minskat i Göteborg/Säve data mängden påstådde vi att byggnation i Göteborg över tid skulle kunna stå för den minskning. 
-                """)
-
     ## Olof version
+    # st.write("""När vi tittar på vinddata över tid märker vi en minskning av den genomsnittliga vindhastigheten per dag.
+    #             Låt oss börja med att undersöka hur vindhastigheten har förändrats beroende på vindriktningen.
+            #  """)
     st.write("""När vi tittar på vinddata över tid märker vi en minskning av den genomsnittliga vindhastigheten per dag.
-                Låt oss börja med att undersöka hur vindhastigheten har förändrats beroende på vindriktningen.
+                Skulle vindminskningen i Säve vara en effekt av ökad byggnation i Göteborg? 
              """)
+       #### Correlation with buildings
+
+    st.header('Är vind minskning i Säve relaterad med byggnation i Göteborg?')
     
+    # st.write("""Efter att vi hade kollat på vinddata i Göteborg och Säve märktes det att vindblås har sjunkit i sin krafighet över tiden. Vi har funderat på olika möjliga källor till denna försjunkning, som till exempel, klimatförändring. 
+    #            En annan hypotes som uppstod under vår analysprocess var att vindhastighetsminskningen kan bero på ökad byggnation i Göteborg. För att undersöka detta jämförde vi vinddata från Säve med SCBs "Färdigställda lägenheter och rumsenheter i nybyggda hus i Göteborg från 1975-2022" """)
+    
+    st.write("""Bygnationsdata
+        """)
+    st.write(""" 
+    Vi beräknade den kummulativa nybyggdlägenhetsmängd i Göteborg från 1975 - 2006, när Säve datamängden slutades.  """)
+    st.write("""Källa: SCBs datamängden:  "Färdigställda lägenheter och rumsenheter i nybyggda hus i Göteborg från 1975-2022""")
+    st.image('../plottar/kumulativ_lägenheter_gbg.png', width=700)
+    st.write("""När kumulativt antal lägenheter plottas mot årlig vindhastighet i Säve verkar det som det finns en moderat till svag negativ relation.  
+        """)
+
+    st.write("""För att undersöka relationen använde vi en lineär OLS regression ekvation användes:""")
+    st.write("""y = a * X + c """)
+    
+    st.image('../plottar/reg_results_sav_bygg_linear.png', width = 700)
+    st.image('../plottar/bygg_wind_sav_linear.png', width = 700)
+    st.write("""Resultatet visar att en lineärregression model är signifikant (p = 0,0248) med en R-squared värde av 16,7%. Kumulativt antal lägenheter koefficienten var signifikant (p = 0,025) och är relaterad till en 0,00000377 °C årlig minskning i snitttemperatur i genomsnitt. 
+              
+    """)
+    st.write("""Det verkar som relationen är dock heteroskedastic, eller att vindhastighets variation minskas när byggnation ökas. Detta står i konflikt med OLS-antagandet om homoskedasticitet. 
+    """)
+    st.write(""" Skulle det vara så att relationen mellan byggnation och vindhastigheten starkas medan mer lägenheter byggs?""")
+
+    st.header("""Har vinden blivit svagare i Säve från riktningen av Göteborg?""")
+ 
+
     # wind direction Rose plots 
     vinddir_gbg_1 = "../plottar/windrose_all_winds_pre_1992_gbg.png"
     vinddir_gbg_2 = "../plottar/windrose_all_winds_post_1992_gbg.png"
@@ -299,38 +322,7 @@ if nav == 'Vind':
     hard_winds_over_time_vinga = "../plottar/hard_winds_vinga_barplot.png"
     st.image(hard_winds_over_time_save)
     st.image(hard_winds_over_time_vinga)
-
-
-    #### Correlation with buildings
-
-    st.header('Är vind minskning i Säve relaterad med byggnation i Göteborg?')
-    
-    st.write("""Efter att vi hade kollat på vinddata i Göteborg och Säve märktes det att vindblås har sjunkit i sin krafighet över tiden. Vi har funderat på olika möjliga källor till denna försjunkning, som till exempel, klimatförändring. 
-               En annan hypotes som uppstod under vår analysprocess var att vindhastighetsminskningen kan bero på ökad byggnation i Göteborg. För att undersöka detta jämförde vi vinddata från Säve med SCBs "Färdigställda lägenheter och rumsenheter i nybyggda hus i Göteborg från 1975-2022" """)
-    
-    st.header("""Bygnationsdata
-        """)
-    st.write("""Med byggnationsdata beräknade vi den kummulativa nybyggdlägenhetsmängd i Göteborg från 1975 - 2006, när Säve datamängden slutades.  
-        """)
-    st.image('../plottar/kumulativ_lägenheter_gbg.png', width=700)
-    st.write("""När kumulativt antal lägenheter plottas mot årlig vindhastighet i Säve verkar det som det finns en moderat till svag negativ relation.  
-        """)
-
-    st.write("""För att undersöka relationen använde vi en lineär OLS regression ekvation användes:""")
-    st.write("""y = a * X + c """)
-    
-    st.image('../plottar/reg_results_sav_bygg_linear.png', width = 700)
-
-    st.write("""Resultatet visar att en lineärregression model är signifikant (p = 0,0248) med en R-squared värde av 16,7%. Kumulativt antal lägenheter koefficienten var signifikant (p = 0,025) och är relaterad till en 0,00000377 °C årlig minskning i snitttemperatur i genomsnitt. 
-             Det verkar som relationen är dock heteroskedastic. Detta står i konflikt med OLS-antagandet om homoskedasticitet. 
-    """)
-    st.write("""Det kan emellertid finnas utrymme för tolkning som skulle förklara detta heteroskedastiska beteende. Eftersom en lägre mängd bostäder skulle påverka vinden mindre, kan variationsnivån därför variera kraftigt. 
-             Verkligen kan vinden vissa år vara lägre eller högre baserat på många andra faktorer. Dock, när byggnadsnivåerna ökar, ökar även mängden vindhinder, vilket gör att högre vindhastigheter är mindre troliga att registreras, vilket förklarar det tydligare sambandet mellan byggnadsnivåer och vindhastigheter när byggnadsnivåerna ökar.
-    """)
-    
-
-    st.image('../plottar/bygg_wind_sav_linear.png', width = 700)
-    
+   
 
 if nav == 'Temperatur':
     total_temps_plus_adjusted = ('../Olof_viz/medeltemperaturer.png')
@@ -355,6 +347,33 @@ if nav == 'Temperatur':
     with col2:
         st.image(adjusted, caption='Justerat dataset, där temperaturerna från 2006 och framåt justerats enligt resultaten ovan')
 
+if nav == 'Relationen mellan nederbörd & temperatur':
+    st.title("Relationen mellan nederbörd & temperatur")
+    st.write("På tidigare sidor har vi utforskat både temperatur och nederbörd i detalj. Syftet med denna sida är att upptäcka hur de två samverkar över tiden")
+    st.header("Summary Statistics:")
+    st.image("../plottar/sum_stat_temp_nederbörd.png", width=400)
+    st.write("Histogram för både genomsnittlig månadstemperatur och total månatlig nederbörd:")
+    st.image("../plottar/histogram_temp_nederbörd.png", width=700)
+    st.write("Månatlig genomsnittstemperatur versus total månatlig nederbörd:")
+    st.image("../plottar/scatter_temp_nederbörd.png", width = 700)
+    st.write("Scatterplottan för månatlig genomsnittstemperatur gentemot total månatlig nederbörd visar ett möjligt heteroskedastiskt förhållande.  När den genomsnittliga temperaturen stiger, ökar omfånget av total månatlig nederbörd. ")
+    st.header("Regression")
+    st.write("En OLS-linjär regression används för att uttrycka förhållandet mellan genomsnittlig månadstemperatur och månatlig total nederbörd.")
+    st.write("Ekvationen är: Y = a * X + b")
+    st.image("../plottar/reg_results_ned_temp.png", width = 700)
+    st.image("../plottar/scatter_trendline_temp_ned.png", width=700)
+    st.write("""
+    Snitt månadstemperatur är signifikant relaterad till 2,5% av förändringen i total månatlig nederbörd. Det föreslår att en ökning med en grad är relaterad till en ökning av 0,8956 mm i nederbörd.
+    """)
+    st.write("""
+    Kan det vara så att det lilla sambandet beror på det måttliga förhållandet mellan temperatur och nederbörd vid temperaturer under noll?
+    """)
+    st.image("../plottar/reg_results_ned_temp_overzero.png", width = 700)
+    st.image("../plottar/scatter_temp-ned_over_freezing_trend.png", width=700)
+    st.write("""Det verkar så. När man tar bort temperaturer under 0°C blir modellen och koefficienterna insignifikanta.
+    """)
+
+   
 
 if nav == 'Sommarens och vinterns ankomst':
     st.title('Sommarens och vinterns ankomst')
