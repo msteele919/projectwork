@@ -3,17 +3,31 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-nav = st.sidebar.radio('Huvudmeny', ['Bakgrund och frågeställning', 'Platsinformation', 'Vind', 'Snödjup',
-                                      'Nederbörd', 'Temperatur', 'Relationen mellan nederbörd & temperatur', 'Slutsatser'])
+nav = st.sidebar.radio('Huvudmeny', ['Bakgrund & frågeställning', 'Platsinformation', 'Vind', 'Snödjup',
+                                      'Nederbörd', 'Temperatur', 'Temperatur prediktion', 'Relationen mellan nederbörd & temperatur', 'Slutsatser'])
 
-if nav == 'Bakgrund':
+if nav == 'Bakgrund & frågeställning':
+    st.header("Introduktion")
+    st.text("""Det här projektet undersöker väderdata i Göteborg med hjälp av SMHI-data.
 
-    st.text('''1. Kan man med hjälp av historisk väderdata se trender kring förändringar i vädret?
-            
-            \nHur har temperaturen ändrats sedan första datan?
-            \nRegnar det mer eller mindre nu än förr?
-            \nHar det blivit någon förändring med snödjup?
-            \nKan vi förutspå hur vädret ser ut i till exempel juli 2028?''')
+Data mängder som användes var: 
+    - Temperatur data från Göteborg & Säve 
+    - Nederbörddata från Göteborg & Säve 
+    - Wind data från Göteborg, Säve, Vingön, Trubaduren
+    - Snödjup
+
+Målet med projektet var att analysera väderdata och se hur det har förändrats över 
+tiden.""")
+    st.header("Frågeställning")
+    st.text('''1. Hur har temperaturen ändrats över tid? Vilken variation finns mellan 
+olika månader?
+            \n2. Hur har vindriktning och vindhastighet ändrats över tid? Vilka skillander 
+kan vi se mellan skärgården och fastlandet?
+            \n3. Regnar det mer eller mindre nu än förr?
+            \n4. Har det blivit någon förändring med snödjup?
+            \n5. Finns det en korrelation mellan temperatur och nederbörd över tid?
+            \n6  Hur skulle framtida temperaturer vara i Göteborg baserat på 
+historiska temperaturtrender?''')
 
 
 # if nav == 'EDA':
@@ -209,6 +223,30 @@ if nav == 'Vind':
     visual_index = visual_names.index(current_index)  # Get the index of the selected name
     st.image(compare_visuals[visual_index], caption=current_index)
 
+    st.write("""När vi tittar på vinddata över tid märker vi en minskning av den genomsnittliga vindhastigheten per dag.
+            Skulle vindminskningen i Säve vara en effekt av ökad byggnation i Göteborg? 
+            """)
+    st.header('Är vind minskning i Säve relaterad med byggnation i Göteborg?')
+    st.write("""Bygnationsdata""")
+    st.write("""Vi beräknade den kummulativa nybyggdlägenhetsmängd i Göteborg från 1975 - 2006, när Säve datamängden slutades.  """)
+    st.write("""Källa: SCBs datamängden:  "Färdigställda lägenheter och rumsenheter i nybyggda hus i Göteborg från 1975-2022""")
+    st.image('../plottar/kumulativ_lägenheter_gbg.png', width=700)
+    st.write("""När kumulativt antal lägenheter plottas mot årlig vindhastighet i Säve verkar det som det finns en moderat till svag negativ relation.""")
+
+    st.write("""För att undersöka relationen använde vi en lineär OLS regression ekvation användes:""")
+    st.write("""y = a * X + c """)
+    
+    st.image('../plottar/reg_results_sav_bygg_linear.png', width = 700)
+    st.image('../plottar/bygg_wind_sav_linear.png', width = 700)
+    st.write("""Resultatet visar att en lineärregression model är signifikant (p = 0,0248) med en R-squared värde av 16,7%. Kumulativt antal lägenheter koefficienten var signifikant (p = 0,025) och är relaterad till en 0,00000377 °C årlig minskning i snitttemperatur i genomsnitt. 
+              
+    """)
+    st.write("""Det verkar som relationen är dock heteroskedastic, eller att vindhastighets variation minskas när byggnation ökas. Detta står i konflikt med OLS-antagandet om homoskedasticitet. 
+    """)
+    st.write(""" Skulle det vara så att relationen mellan byggnation och vindhastigheten starkas medan mer lägenheter byggs?""")
+
+    st.header("""Har vinden blivit svagare i Säve från riktningen av Göteborg?""")
+ 
 
 
     selected_location = st.selectbox("Select Location", ["Säve", "Vinga"]) # Removed GBG
@@ -542,6 +580,46 @@ if nav == 'Temperatur':
         ax.set_xlabel('År')
         ax.set_ylabel('Snittemperatur per dag, Celcius')
         st.pyplot(fig)
+
+if nav == 'Temperatur prediktion':
+    st.title('Vad skulle framtida temperaturer i Göteborg vara baserade på historiska temperaturtrender?')
+    st.write('När man ser på temperaturen över tid verkar det finnas en positiv trend.')
+    st.image('../plottar/pred_temp_snitt_overtid.png', width=700)
+    st.header('Metod')
+    st.write('En SARIMA-modell används med tidsseriedata när det finns säsongsbetonade trender i datan som måste beaktas.')
+    st.write("""Data split
+    Vi tittade på månatlig genomsnittstemperatur och bröt upp datan i 
+    tränings- 1944 - 2017
+    validerings-  2017 - 2022
+    testdata- 2022 - 2023""")
+    # st.image('../', width= )
+    
+
+
+if nav == 'Relationen mellan nederbörd & temperatur':
+    st.title("Relationen mellan nederbörd & temperatur")
+    st.write("På tidigare sidor har vi utforskat både temperatur och nederbörd i detalj. Syftet med denna sida är att upptäcka hur de två samverkar över tiden")
+    st.write("Månatlig genomsnittstemperatur versus total månatlig nederbörd:")
+    st.image("../plottar/scatter_temp_nederbörd.png", width = 700)
+    st.write("Scatterplottan för månatlig genomsnittstemperatur gentemot total månatlig nederbörd visar ett möjligt heteroskedastiskt förhållande.  När den genomsnittliga temperaturen stiger, ökar omfånget av total månatlig nederbörd. ")
+    st.header("Regression")
+    st.write("En OLS-linjär regression används för att uttrycka förhållandet mellan genomsnittlig månadstemperatur och månatlig total nederbörd.")
+    st.write("Ekvationen är: Y = a * X + b")
+    st.image("../plottar/reg_results_ned_temp.png", width = 700)
+    st.image("../plottar/scatter_trendline_temp_ned.png", width=700)
+    st.write("""
+    Snitt månadstemperatur är signifikant relaterad till 2,5% av förändringen i total månatlig nederbörd. Det föreslår att en ökning med en grad är relaterad till en ökning av 0,8956 mm i nederbörd.
+    """)
+    st.write("""
+    Kan det vara så att det lilla sambandet beror på det måttliga förhållandet mellan temperatur och nederbörd vid temperaturer under noll?
+    """)
+    st.image("../plottar/reg_results_ned_temp_overzero.png", width = 700)
+    st.image("../plottar/scatter_temp-ned_over_freezing_trend.png", width=700)
+    st.write("""Det verkar så. När man tar bort temperaturer under 0°C blir modellen och koefficienterna insignifikanta.
+    """)
+if nav == 'Slutsatser':
+    st.title("Slutsatser")
+    st.write("""Det här projektet har varit.. """)
     ## Old version
 #     total_temps_plus_adjusted = ('../Olof_viz/medeltemperaturer.png')
 #     temp_diff = ('../Olof_viz/temp_diff_gbg_save.png')

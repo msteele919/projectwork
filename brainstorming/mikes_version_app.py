@@ -5,7 +5,7 @@ import seaborn as sns
 import streamlit as st
 import os 
 
-nav = st.sidebar.radio('Huvudmeny', ['Bakgrund', 'Frågeställning', 'EDA', 'Platsinformation',  'Vind', 'Snödjup', 'Nederbörd', 'Temperatur', 'Relationen mellan nederbörd & temperatur','Sommarens och vinterns ankomst' ])
+nav = st.sidebar.radio('Huvudmeny', ['Bakgrund', 'Frågeställning', 'EDA', 'Platsinformation',  'Vind', 'Snödjup', 'Nederbörd', 'Temperatur', 'Temperatur prediktion','Relationen mellan nederbörd & temperatur','Sommarens och vinterns ankomst' ])
 if nav == 'Bakgrund':
     st.title('Jasså, det vill du allt bra veta va?')
     st.text('''1. Kan man med hjälp av historisk väderdata se trender kring förändringar i vädret?
@@ -120,10 +120,10 @@ if nav == 'Vind':
     # Meta knappar: välj mellan säve, Göteborg, Säve & Göteborg
     vind_1 = "../plottar/mean_wind_daily_gbg.png"
     vind_2 = "../plottar/mean_wind_daily_sv.png"
-    vind_3 = "../plottar/mean_wind_daily_sv_gt.png"
+    vind_3 = "../plottar/mean_wind_daily_vinga.png"
     compare_visuals = [ vind_1, vind_2, vind_3]
 
-    visual_names = ["GBG Snittvindhastighet p/dag", "Säve Snittvindhastighet p/dag", "GBG, Säve sammanlagt, Snittvindhastighet p/dag"]
+    visual_names = ["GBG Snittvindhastighet p/dag", "Säve Snittvindhastighet p/dag", "Vinga Snittvindhastighet p/dag"]
     # Display the current visual based on a user-selected name
     current_index = st.selectbox("Välj stationen", visual_names, index=0)
     visual_index = visual_names.index(current_index)  # Get the index of the selected name
@@ -139,32 +139,6 @@ if nav == 'Vind':
                 """)
 
     
-
-
-    # intensitivitet över tiden 
-
-
-    # wind direction Rose plots 
-    vinddir_gbg_1 = "../plottar/wind_dir_gbg_pre1980.png"
-    vinddir_gbg_2 = "../plottar/wind_dir_gbg_post1980.png"
-    vinddir_sav_1 = "../plottar/wind_dir_sav_pre1980.png"
-    vinddir_sav_2 = "../plottar/wind_dir_sav_post1980.png"
-    
-    selected_location = st.selectbox("Välj stationen", ["GBG", "Säve"])
-
-        # Use if-else conditions to display the appropriate visuals
-    if selected_location == "GBG":
-        col1, col2 = st.columns(2)
-        with col1:
-            st.image(vinddir_gbg_1, caption="GBG Snittvindhastighet p/dag")
-        with col2:
-            st.image(vinddir_gbg_2, caption="Säve Snittvindhastighet p/dag")
-    elif selected_location == "Säve":
-        col1, col2 = st.columns(2)
-        with col1:
-            st.image(vinddir_sav_1, caption="GBG Snittvindhastighet p/dag")
-        with col2:
-            st.image(vinddir_sav_2, caption="Säve Snittvindhastighet p/dag")
 
     # snitt vindblås per dag, max vindblås per dag, snitt vindblås per månad
     st.header('Är vind minskning i Säve relaterad med byggnation i Göteborg?')
@@ -218,18 +192,19 @@ if nav == 'Temperatur':
     temp_comp = ('temp_adjusted_comparison.png')
     st.image(temp_comp, width=1000)
 
-    st.title('Förutsägelser om framtids snitt temperatur')
-    st.write('Med temperaturdata från Save väder station har en recursive multisteg autoregressiv modell använts inom sciket learn.')
-    st.header('Metodik:')
-    st.write('En recursive multi-step autoregressiv modell är ett sätt att kunna använda time series data och förutsäga framtida värde. I en recursiv autoregression modell så används ett antal steg som kallas lags som modellen skall basera sina prediktioner på. Denna siffra bestämdes efter en grid search. Lag som fick lägst root mean square error var 30 dagar. Detta skulle då representera månadsvis trender. ')
+if nav == 'Temperatur prediktion':
+    st.title('Vad skulle framtida temperaturer i Göteborg vara baserade på historiska temperaturtrender?')
+    st.write('När man ser på temperaturen över tid verkar det finnas en positiv trend.')
+    st.image('../plottar/pred_temp_snitt_overtid.png', width=700)
+    st.header('Metod')
+    st.write('En Seasonal Autoregressive Integrated Moving Average Model för . multi-step autoregressiv modell är ett sätt att kunna använda time series data och förutsäga framtida värde. I en recursiv autoregression modell så används ett antal steg som kallas lags som modellen skall basera sina prediktioner på. Denna siffra bestämdes efter en grid search. Lag som fick lägst root mean square error var 30 dagar. Detta skulle då representera månadsvis trender. ')
     st.header('Placeholder för algoritmen. Nedan visas grafer:')
     st.subheader('Data Split med Säve data. Training data innan 2010-01-01')
-    st.image(image)
     st.subheader('Resultat från gridsearch.')
     st.write('Lag med 30 dagar visade sig ha bäst root mean square error')
-    st.image(grid_s)
+    # st.image("../", width= )
     st.subheader('Resultat från prediktion')
-    st.image(pred_bad)
+    ## st.image(pred_bad)
     st.write('Root Mean square error var faktiskt hög för denna modell. 13,59°C root mean square visar att modellen ännu inte har en bra prediktionsförmåga. Nästa steg skulle vara att använd en seasonal ARIMA modell. Då denna modell tog hansyn till månadsvis skillnader säsong förändringar måste tänkas över.')
 
 if nav == 'Relationen mellan nederbörd & temperatur':
@@ -238,7 +213,7 @@ if nav == 'Relationen mellan nederbörd & temperatur':
     st.header("Summary Statistics:")
     st.image("../plottar/sum_stat_temp_nederbörd.png", width=400)
     st.write("Histogram för både genomsnittlig månadstemperatur och total månatlig nederbörd:")
-    st.image("../plottar/histogram_temp_nederbörd.png", width=700)
+    st.image("../plottar/histogram_temp_nederbörd.png", width=700) 
     st.write("Månatlig genomsnittstemperatur versus total månatlig nederbörd:")
     st.image("../plottar/scatter_temp_nederbörd.png", width = 700)
     st.write("Scatterplottan för månatlig genomsnittstemperatur gentemot total månatlig nederbörd visar ett möjligt heteroskedastiskt förhållande.  När den genomsnittliga temperaturen stiger, ökar omfånget av total månatlig nederbörd. ")
