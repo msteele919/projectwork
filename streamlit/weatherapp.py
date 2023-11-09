@@ -29,9 +29,17 @@ if nav == 'Platsinformation':
     st.write("Under åren har mätstationen i Göteborg stått på olika ställen. \nSedan 1998 är den belägen vid Gullbergsvass")
 
     st.write('Säve ligger på Hisingen, ungefär 10km fågelvägen från centrala Göteborg. Stationen har inte flyttats. Vinga ligger ute i skärgården.')
-
+    current_station_gbg_lat_long = [57.7156, 11.9924]
     stations = pd.read_pickle('../Dataframes/station_info.pkl')
-    st.map(stations, latitude='LAT', longitude='LON', zoom=9.5, size=500)
+    green_hex = '#06a94d'
+    red_hex = '#EE0000'
+    # current = df['Tidsperiod (t.o.m)'].max()
+    for ind, row in stations.iterrows():
+        if row['LON'] == current_station_gbg_lat_long[1]:
+            stations.at[ind, 'Colour'] = green_hex
+        else:
+            stations.at[ind, 'Colour'] = red_hex
+    st.map(stations, latitude='LAT', longitude='LON', zoom=9.5, size=500, color='Colour')
 
 
 
@@ -250,12 +258,19 @@ if nav == 'Temperatur':
              rättvisande. Annars kan snittemperaturen stiga drastisk när vi tar data från Göteborg, 
              utan att det nödvändigtvis var varmare.''')
     st.image(both_datasets_compared, caption='Snabb jämförelse mellan snittemperaturer för båda dataseten')
-    
+    '\n'
+    '\n'
+    '\n'
     st.image(temp_diff, caption='''Skillnader i månadstemperatur mellan Görborg och Säve under den överlappande perioden 1961 till 2006. 
              Visar temperatur i Göteborg minus temperatur i Säve''')
-    st.write('Temperaturer justerat efter månadssnitten ovan.')
+    st.subheader('Temperaturer justerat efter månadssnitten ovan.')
     st.image(medeltemp)
-
+    '\n'
+    '\n'
+    '\n'
+    st.subheader('Det blir varmare på vintern')
+    avg_temp_increase = ('../plottar/avg_temp_change_per_month.png')
+    st.image(avg_temp_increase)
     '\n'
     '\n'
     '\n'
@@ -263,12 +278,12 @@ if nav == 'Temperatur':
     st.write('"Meteorologer definierar vinter som den period då dygnets medeltemperatur varaktigt är 0,0 grader eller lägre." /SMHI')
     summer_arrival_trendline = ('../plottar/summer_arrivals_trendline.png')
     st.image(summer_arrival_trendline, caption='I snitt ankommer sommaren 5e Maj')
-
-
+    '\n'
+    '\n'
+    '\n'
     #### Just for fun, see temps
 
-    st.title('Se temperaturer för månad och tidspann.')
-    '\n'
+    st.subheader('Se temperaturer för månad och tidspann.')
     '\n'
     df = pd.read_pickle('../dataframes/df_compiled_adjusted_monthly_temp_gbg_save.pkl')
     first_year = df['Year'].min()
@@ -323,9 +338,9 @@ if nav == 'Temperatur':
 
         df = df[df['Month'] == month+1]
         fig, ax = plt.subplots()
-        sns.scatterplot(data=df, x='Year', y='Snittemperatur')
-        sns.regplot(x=df['Year'], y=df['Snittemperatur'], ci=False)
-        # ax.scatter(x=df['Year'], y=df['Snittemperatur'])
+        sns.scatterplot(data=df, x='Year', y='Snittemperatur', c='b')
+        sns.regplot(x=df['Year'], y=df['Snittemperatur'], ci=False, color='g', line_kws={'linestyle': '--'})
+        ax.scatter(x=df['Year'], y=df['Snittemperatur'])
         ax.set_title(f'Temperaturer i {month_list[month]}')
         ax.set_xlabel('År')
         ax.set_ylabel('Snittemperatur per dag, Celcius')
