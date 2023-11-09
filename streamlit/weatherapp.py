@@ -509,10 +509,10 @@ if nav == 'Temperatur':
     '\n'
     '\n'
     '\n'
-    st.write('"Den meteorologiska definitionen av sommar är att dygnsmedeltemperaturen varaktigt ska vara minst 10,0°C." /SMHI')
-    st.write('"Meteorologer definierar vinter som den period då dygnets medeltemperatur varaktigt är 0,0 grader eller lägre." /SMHI')
-    summer_arrival_trendline = ('../plottar/summer_arrivals_trendline.png')
-    st.image(summer_arrival_trendline, caption='I snitt ankommer sommaren 5e Maj')
+    # st.write('"Den meteorologiska definitionen av sommar är att dygnsmedeltemperaturen varaktigt ska vara minst 10,0°C." /SMHI')
+    # st.write('"Meteorologer definierar vinter som den period då dygnets medeltemperatur varaktigt är 0,0 grader eller lägre." /SMHI')
+    # summer_arrival_trendline = ('../plottar/summer_arrivals_trendline.png')
+    # st.image(summer_arrival_trendline, caption='I snitt ankommer sommaren 5e Maj')
     '\n'
     '\n'
     '\n'
@@ -592,7 +592,20 @@ if nav == 'Temperatur prediktion':
     tränings- 1944 - 2017
     validerings-  2017 - 2022
     testdata- 2022 - 2023""")
-    # st.image('../', width= )
+    st.image('../plottar/pred_test_train_val_split.png', width=700)
+    st.write('Modellens prestanda')
+    st.image('../plottar/pred_temp_performance graphs.png', width= 700)
+    st.write('Prestandan för modellen mättes med ett RMSE på 1.9768 °C.')
+    st.write('Modelens predikterad värden vs test data')
+    st.image('../plottar/pred_temp_2023_perforamance.png', width = 700)    
+    st.write('Att extrapolera modellen över tid. Vad blir temperaturen om 20 år?')
+    st.image('../plottar/pred_temperature_till_2042.png', width=700)
+    st.write('Modellen fångar en svag ökning i snitt temperatur över tiden. Den prediktera att snitt temperaturen i Juli 2042 blir 18,68°C, uppe från 18,43°C i Juli 2022')
+
+
+    
+
+
     
 
 
@@ -643,15 +656,3 @@ if nav == 'Slutsatser':
 #     with col2:
 #         st.image(adjusted, caption='Justerat dataset, där temperaturerna från 2006 och framåt justerats enligt resultaten ovan')
 
-
-# if nav == 'Sommarens och vinterns ankomst':
-#     st.title('Sommarens och vinterns ankomst')
-#     st.write('"Den meteorologiska definitionen av sommar är att dygnsmedeltemperaturen varaktigt ska vara minst 10,0°C." /SMHI')
-#     st.write('"Meteorologer definierar vinter som den period då dygnets medeltemperatur varaktigt är 0,0 grader eller lägre." /SMHI')
-#     '\n'
-#     '\n'
-#     '\n'
-#     '\n'
-#     st.title('Sommarens anskomst')
-#     summer_arrival = ('summer_arrival_adjusted_comp.png')
-#     st.image(summer_arrival, width=1000)
