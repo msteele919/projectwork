@@ -339,13 +339,26 @@ if nav == 'Temperatur':
     
     st.image(temp_diff, caption='''Skillnader i månadstemperatur mellan Görborg och Säve under den överlappande perioden 1961 till 2006. 
              Visar hur mycket varmare/kallare Göteborg var än Säve. Vid positivt tal var Göteborg varmare''')
-    
-
     col1, col2 = st.columns(2)
     with col1:
         st.image(unadjusted, caption='Sammansatt dataset av data från Säve fram till 2006.')
     with col2:
         st.image(adjusted, caption='Justerat dataset, där temperaturerna från 2006 och framåt justerats enligt resultaten ovan')
+
+    st.title('Förutsägelser om framtids snitt temperatur')
+    st.write('Med temperaturdata från Save väder station har en recursive multisteg autoregressiv modell använts inom sciket learn.')
+    st.header('Metodik:')
+    st.write('En recursive multi-step autoregressiv modell är ett sätt att kunna använda time series data och förutsäga framtida värde. I en recursiv autoregression modell så används ett antal steg som kallas lags som modellen skall basera sina prediktioner på. Denna siffra bestämdes efter en grid search. Lag som fick lägst root mean square error var 30 dagar. Detta skulle då representera månadsvis trender. ')
+    st.header('Placeholder för algoritmen. Nedan visas grafer:')
+    st.subheader('Data Split med Säve data. Training data innan 2010-01-01')
+    st.image(image)
+    st.subheader('Resultat från gridsearch.')
+    st.write('Lag med 30 dagar visade sig ha bäst root mean square error')
+    st.image(grid_s)
+    st.subheader('Resultat från prediktion')
+    st.image(pred_bad)
+    st.write('Root Mean square error var faktiskt hög för denna modell. 13,59°C root mean square visar att modellen ännu inte har en bra prediktionsförmåga. Nästa steg skulle vara att använd en seasonal ARIMA modell. Då denna modell tog hansyn till månadsvis skillnader säsong förändringar måste tänkas över.')
+
 
 if nav == 'Relationen mellan nederbörd & temperatur':
     st.title("Relationen mellan nederbörd & temperatur")
@@ -372,9 +385,6 @@ if nav == 'Relationen mellan nederbörd & temperatur':
     st.image("../plottar/scatter_temp-ned_over_freezing_trend.png", width=700)
     st.write("""Det verkar så. När man tar bort temperaturer under 0°C blir modellen och koefficienterna insignifikanta.
     """)
-
-   
-
 if nav == 'Sommarens och vinterns ankomst':
     st.title('Sommarens och vinterns ankomst')
     st.write('"Den meteorologiska definitionen av sommar är att dygnsmedeltemperaturen varaktigt ska vara minst 10,0°C." /SMHI')
