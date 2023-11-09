@@ -3,32 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-precip = pd.read_pickle("../Dataframes/df_compiled_daily_precipitation_gbg_save.pkl")
-snodjup = pd.read_pickle("../Dataframes/df_snow_save.pkl")
-aprilregn = ("../plottar/aprilregn.png")
-oktoberregn = ("../plottar/oktoberregn.png")
-sno10 = snodjup.query("Snödjup >= .1")
-sno20 = snodjup.query("Snödjup >= .2")
-sno30 = snodjup.query("Snödjup >= .3")
-sno40 = snodjup.query("Snödjup >= .4")
-sno50 = snodjup.query("Snödjup >= .5")
-
-intervaller = { '10 cm' : sno10, '20 cm' : sno20, '30 cm' : sno30, '40 cm' : sno40, '50 cm' : sno50} 
-snointervaller = [sno10, sno20, sno30, sno40, sno50]
-
-# def snodjupfunk(djup):
-#     sns.scatterplot(data=djup, x='Datum', y='Snödjup')
-#     plt.title(f'Antal observerade dagar per år med mer än {djup}cm snö.')
-#     plt.xlabel('År')
-#     plt.ylabel('Snödjup i meter')
-#     plt.show()
-
-def count_10_year_intervals(data):
-    data = data.drop_duplicates(subset='Datum')
-    bins = list(range(1944, 2005, 10))
-    interval_counts = data.groupby(pd.cut(data['Year'], bins=bins), observed=True).size()
-    return interval_counts
-
 nav = st.sidebar.radio('Huvudmeny', ['Bakgrund och frågeställning', 'Platsinformation', 'Vind', 'Snödjup',
                                       'Nederbörd', 'Temperatur', 'Relationen mellan nederbörd & temperatur', 'Slutsatser'])
 
@@ -152,6 +126,7 @@ if nav == 'Platsinformation':
 #     st.map(df_save, latitude='LAT', longitude='LON', zoom=9, size=1000)
 
 if nav == 'Snödjup':
+    snodjup = pd.read_pickle("../Dataframes/df_snow_save.pkl")
     st.title('Snödjup')
     st.subheader('Information om datan')
     st.write(f"""Snödjupet är mätt på Säve mätstation som ligger vid Säve flygplats. Datan är insamlad mellan januari 1944 och december 2003 och mäts i meter.
@@ -183,6 +158,7 @@ if nav == 'Snödjup':
 
 
 if nav == 'Nederbörd':
+    precip = pd.read_pickle("../Dataframes/df_compiled_daily_precipitation_gbg_save.pkl")
     st.title('Nederbörd')
     st.subheader('Beskrivning av dataset')
     st.write("""Regndatan är insamlad från mätstationerna i Säve och i Göteborg. Datan från Säve är insamlad från första januari 1944 och sträcker sig till 30e november 2002.
@@ -214,6 +190,26 @@ if nav == 'Nederbörd':
               """)
 
 if nav == 'Vind':
+    st.title('Överblick över vind-data ')
+
+    st.write('"Den vindhastighet som meteorologen anger i prognoser och flertalet av våra mätningar avser ett medelvärde under 10 minuter av vindhastigheten på 10 meters höjd ovan markytan." /SMHI')
+    st.write("""Som i de andra exempel har vi konkatenerat Säve och Göteborgs data för att kunna ha data från 1944 till 2023. Med knapparna nedan kan man skrolla igenom 
+             """)
+    # knappar där man kan kolla på till exempel Säve data, Göteborgs data 
+        # Meta knappar: välj mellan säve, Göteborg, Säve & Göteborg
+    vind_1 = "../plottar/mean_wind_daily_gbg.png"
+    vind_2 = "../plottar/mean_wind_daily_sv.png"
+    vind_3 = "../plottar/mean_wind_daily_vinga.png"
+    
+    compare_visuals = [ vind_1, vind_2, vind_3]
+
+    visual_names = ["GBG Snittvindhastighet p/dag", "Säve Snittvindhastighet p/dag", "Vinga Snittvindhastighet p/dag"]
+    # Display the current visual based on a user-selected name
+    current_index = st.selectbox("Select Visual", visual_names, index=0)
+    visual_index = visual_names.index(current_index)  # Get the index of the selected name
+    st.image(compare_visuals[visual_index], caption=current_index)
+
+
 
     selected_location = st.selectbox("Select Location", ["Säve", "Vinga"]) # Removed GBG
     vinddir_gbg_1 = "../plottar/windrose_all_winds_pre_1992_gbg.png"
@@ -539,9 +535,6 @@ if nav == 'Temperatur':
 
         df = df[df['Month'] == month+1]
         fig, ax = plt.subplots()
-        sns.scatterplot(data=df, x='Year', y='Snittemperatur', c='b')
-        sns.regplot(x=df['Year'], y=df['Snittemperatur'], ci=False, color='g', line_kws={'linestyle': '--'})
-        ax.scatter(x=df['Year'], y=df['Snittemperatur'])
         sns.scatterplot(data=df, x='Year', y='Snittemperatur', c='b')
         sns.regplot(x=df['Year'], y=df['Snittemperatur'], ci=False, color='g', line_kws={'linestyle': '--'})
         ax.scatter(x=df['Year'], y=df['Snittemperatur'])
