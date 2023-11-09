@@ -3,30 +3,29 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-nav = st.sidebar.radio('Huvudmeny', ['Bakgrund & frågeställning', 'Platsinformation', 'Vind', 'Snödjup',
-                                      'Nederbörd', 'Temperatur', 'Temperatur prediktion', 'Relationen mellan nederbörd & temperatur', 'Slutsatser'])
+nav = st.sidebar.radio('Huvudmeny', ['Bakgrund & frågeställning', 'Platsinformation', 'Vind',
+                                      'Nederbörd', 'Temperatur', 'Relationen mellan nederbörd & temperatur', 'Temperatur prediktion', 'Slutsatser'])
 
 if nav == 'Bakgrund & frågeställning':
     st.header("Introduktion")
-    st.text("""Det här projektet undersöker väderdata i Göteborg med hjälp av SMHI-data.
+    st.write("""Det här projektet undersöker väderdata i Göteborgsområdet med hjälp av SMHI-data.
 
-Data mängder som användes var: 
-    - Temperatur data från Göteborg & Säve 
+\nData mängder som användes var: 
+\n    - Temperaturdata från Göteborg & Säve 
     - Nederbörddata från Göteborg & Säve 
-    - Wind data från Göteborg, Säve, Vingön, Trubaduren
-    - Snödjup
+    - Vinddata från Göteborg, Säve och Vinga
 
 Målet med projektet var att analysera väderdata och se hur det har förändrats över 
-tiden.""")
+tid.""")
     st.header("Frågeställning")
-    st.text('''1. Hur har temperaturen ändrats över tid? Vilken variation finns mellan 
+    st.write('''1. Hur har temperaturen ändrats över tid? Vilken variation finns mellan 
 olika månader?
             \n2. Hur har vindriktning och vindhastighet ändrats över tid? Vilka skillander 
 kan vi se mellan skärgården och fastlandet?
             \n3. Regnar det mer eller mindre nu än förr?
             \n4. Har det blivit någon förändring med snödjup?
             \n5. Finns det en korrelation mellan temperatur och nederbörd över tid?
-            \n6  Hur skulle framtida temperaturer vara i Göteborg baserat på 
+            \n6.  Hur skulle framtida temperaturer vara i Göteborg baserat på 
 historiska temperaturtrender?''')
 
 
@@ -139,27 +138,27 @@ if nav == 'Platsinformation':
 #     df_save = pd.DataFrame({'LON': [float(save_long), float(vinga_long)], 'LAT': [float(save_lat), float(vinga_lat)]})
 #     st.map(df_save, latitude='LAT', longitude='LON', zoom=9, size=1000)
 
-if nav == 'Snödjup':
-    snodjup = pd.read_pickle("../Dataframes/df_snow_save.pkl")
-    st.title('Snödjup')
-    st.subheader('Information om datan')
-    st.write(f"""Snödjupet är mätt på Säve mätstation som ligger vid Säve flygplats. Datan är insamlad mellan januari 1944 och december 2003 och mäts i meter.
-             \nDet är lite glapp i informationen.""")
-    if st.checkbox('Visa antal mätningar per år.'):
-        st.write(snodjup.Year.value_counts())
-    st.subheader("""Hur ser det ut egentligen med snö över tid?""")
-    # st.write(f"Minsta snödjup: {snodjup['Snödjup'].min()}m")
-    # st.write(f"Medelsnödjup över alla år: {round(snodjup['Snödjup'].mean(),3)}m")
-    # st.write(f"Max uppmätta snödjupet: {snodjup['Snödjup'].max()}m")
-    # st.subheader('Vi tittar på perioden då det snöar.')
-    # st.image("../plottar/snodjuppermånad.png")
-    # st.write("""Det är ju rimligt att snö-observationerna är mellan januari och maj och oktober och december då det inte snöar under sommaren.""")
-    # st.write("Hur ligger det då till med snödjupet när det väl snöar en period?")
-    # st.image("../plottar/snöperperiod.png")
-    # st.write('Som vi ser här är det inte så konstigt att det ligger mer snö på marken i slutet av perioden egentligen.')
-    # st.write("Hur har det sett ut genom åren?")
-    st.image("../plottar/totalsnödjup.png")
-    st.write("Det verkar ju onekligen som att det är mindre snö på marken efter 90-talet jämfört med exempelvis 80-talet.")
+# if nav == 'Snödjup':
+#     snodjup = pd.read_pickle("../Dataframes/df_snow_save.pkl")
+#     st.title('Snödjup')
+#     st.subheader('Information om datan')
+#     st.write(f"""Snödjupet är mätt på Säve mätstation som ligger vid Säve flygplats. Datan är insamlad mellan januari 1944 och december 2003 och mäts i meter.
+#              \nDet är lite glapp i informationen.""")
+#     if st.checkbox('Visa antal mätningar per år.'):
+#         st.write(snodjup.Year.value_counts())
+#     st.subheader("""Hur ser det ut egentligen med snö över tid?""")
+#     # st.write(f"Minsta snödjup: {snodjup['Snödjup'].min()}m")
+#     # st.write(f"Medelsnödjup över alla år: {round(snodjup['Snödjup'].mean(),3)}m")
+#     # st.write(f"Max uppmätta snödjupet: {snodjup['Snödjup'].max()}m")
+#     # st.subheader('Vi tittar på perioden då det snöar.')
+#     # st.image("../plottar/snodjuppermånad.png")
+#     # st.write("""Det är ju rimligt att snö-observationerna är mellan januari och maj och oktober och december då det inte snöar under sommaren.""")
+#     # st.write("Hur ligger det då till med snödjupet när det väl snöar en period?")
+#     # st.image("../plottar/snöperperiod.png")
+#     # st.write('Som vi ser här är det inte så konstigt att det ligger mer snö på marken i slutet av perioden egentligen.')
+#     # st.write("Hur har det sett ut genom åren?")
+#     st.image("../plottar/totalsnödjup.png")
+#     st.write("Det verkar ju onekligen som att det är mindre snö på marken efter 90-talet jämfört med exempelvis 80-talet.")
 
     # selected_dataframe = st.selectbox("Visa antal dagar med snödjup över: ", list(intervaller.keys()))
     # if selected_dataframe in intervaller:
@@ -207,19 +206,19 @@ if nav == 'Vind':
     st.title('Överblick över vind-data ')
 
     st.write('"Den vindhastighet som meteorologen anger i prognoser och flertalet av våra mätningar avser ett medelvärde under 10 minuter av vindhastigheten på 10 meters höjd ovan markytan." /SMHI')
-    st.write("""Som i de andra exempel har vi konkatenerat Säve och Göteborgs data för att kunna ha data från 1944 till 2023. Med knapparna nedan kan man skrolla igenom 
-             """)
+    # st.write("""Som i de andra exempel har vi konkatenerat Säve och Göteborgs data för att kunna ha data från 1944 till 2023. Med knapparna nedan kan man skrolla igenom 
+    #          """)
     # knappar där man kan kolla på till exempel Säve data, Göteborgs data 
         # Meta knappar: välj mellan säve, Göteborg, Säve & Göteborg
-    vind_1 = "../plottar/mean_wind_daily_gbg.png"
-    vind_2 = "../plottar/mean_wind_daily_sv.png"
+    vind_1 = "../plottar/mean_wind_daily_sv.png"
+    vind_2 = "../plottar/mean_wind_daily_gbg.png"
     vind_3 = "../plottar/mean_wind_daily_vinga.png"
     
     compare_visuals = [ vind_1, vind_2, vind_3]
 
-    visual_names = ["GBG Snittvindhastighet p/dag", "Säve Snittvindhastighet p/dag", "Vinga Snittvindhastighet p/dag"]
+    visual_names = ["Säve Snittvindhastighet p/dag", "GBG Snittvindhastighet p/dag", "Vinga Snittvindhastighet p/dag"]
     # Display the current visual based on a user-selected name
-    current_index = st.selectbox("Select Visual", visual_names, index=0)
+    current_index = st.selectbox("Välj Dataset", visual_names, index=0)
     visual_index = visual_names.index(current_index)  # Get the index of the selected name
     st.image(compare_visuals[visual_index], caption=current_index)
 
@@ -256,7 +255,7 @@ if nav == 'Vind':
     vinddir_sav_2 = "../plottar/windrose_all_winds_post_1990_save.png"
     vinddir_vinga_1 = "../plottar/windrose_all_winds_pre_1990_vinga.png"
     vinddir_vinga_2 = "../plottar/windrose_all_winds_post_1990_vinga.png"
-    
+
 
     if selected_location == "Säve":
         col1, col2 = st.columns(2)
@@ -286,19 +285,19 @@ if nav == 'Vind':
 
 
     #### Harder winds
-    st.subheader('Hårdare vindar')
-    st.write('Beaufort-skalan: 13.9m/s är "hård vind"')
+    # st.subheader('Hårdare vindar')
+    # st.write('Beaufort-skalan: 13.9m/s är "hård vind"')
     hard_winds_over_time = ('../Olof_viz/hard_winds_over_time_comparison.png')
-    st.image(hard_winds_over_time)
+    # st.image(hard_winds_over_time)
 
 
 
     hard_winds_over_time_save = "../plottar/hard_winds_save_barplot.png"
-    hard_winds_over_time_vinga = "../plottar/hard_winds_vinga_barplot.png"
-    '\n'
+    # hard_winds_over_time_vinga = "../plottar/hard_winds_vinga_barplot.png"
+    # '\n'
     st.write('1978 är halvvägs mellan början på tillförlitlig data (1950) och sista mätningen i Säve (2006)')
     st.image(hard_winds_over_time_save, caption='Drastisk minskning i andra halvan av datasetet.')
-    st.image(hard_winds_over_time_vinga, 'Ganska stor ökning, förmodligen relaterat till det högre antalet mätningar per år.')
+    # st.image(hard_winds_over_time_vinga, 'Ganska stor ökning, förmodligen relaterat till det högre antalet mätningar per år.')
 
     st.write('Slutsats: Större andel kraftiga vindar från söder, men överlag lägre hastigheter.')
     st.write('Ingen större skilnad i vindar från Göteborgs-hållet.')
@@ -445,7 +444,7 @@ if nav == 'Temperatur':
     medeltemp = ('../plottar/medeltemp_sammanslaget.png')
     both_datasets_compared = ('../plottar/temp_skilnad_snitt_gbg_save_resp_dataset.png')
     st.title('Temperaturdata')
-    st.text('Data för Säve: 1944-2006 \nData för Göteborg: 1961 ->')
+    st.text('Data för Säve: 1944-2006 \nData för Göteborg: 1961-2023')
     st.write('Sätter vi samman dataseten får vi mycket längre spann att titta på.')
     temps_meassures_gbg = ('../plottar/temp_meassurements_gbg.png')
     temps_meassures_save = ('../plottar/temp_meassurements_save.png')
@@ -587,25 +586,6 @@ if nav == 'Temperatur':
         ax.set_ylabel('Snittemperatur per dag, Celcius')
         st.pyplot(fig)
 
-if nav == 'Temperatur prediktion':
-    st.title('Vad skulle framtida temperaturer i Göteborg vara baserade på historiska temperaturtrender?')
-    st.write('När man ser på temperaturen över tid verkar det finnas en positiv trend.')
-    st.image('../plottar/pred_temp_snitt_overtid.png', width=700)
-    st.header('Metod')
-    st.write('En SARIMA-modell används med tidsseriedata när det finns säsongsbetonade trender i datan som måste beaktas.')
-    st.write("""Data split
-    Vi tittade på månatlig genomsnittstemperatur och bröt upp datan i 
-    tränings- 1944 - 2017
-    validerings-  2017 - 2022
-    testdata- 2022 - 2023""")
-    st.image('../plottar/pred_test_train_val_split.png', width=700)
-    st.write('Modellens prestanda')
-    st.image('../plottar/pred_temp_performance graphs.png', width= 700)
-    st.write('Prestandan för modellen mättes med ett RMSE på 1.9768 °C.')
-    st.write('Modelens predikterad värden vs test data')
-    st.image('../plottar/pred_temp_2023_perforamance.png', width = 700)    
-    st.write('Att extrapolera modellen över tid. Vad blir temperaturen om 20 år?')
-    st.image('../plottar/pred_temperature_till_2042.png', width=700)
     st.write('Modellen fångar en svag ökning i snitt temperatur över tiden. Den prediktera att snitt temperaturen i Juli 2042 blir 18,68°C, uppe från 18,43°C i Juli 2022')
 if nav == 'Relationen mellan nederbörd & temperatur':
     st.title("Relationen mellan nederbörd & temperatur")
@@ -628,9 +608,38 @@ if nav == 'Relationen mellan nederbörd & temperatur':
     st.image("../plottar/scatter_temp-ned_over_freezing_trend.png", width=700)
     st.write("""Det verkar så. När man tar bort temperaturer under 0°C blir modellen och koefficienterna insignifikanta.
     """)
+
+
+if nav == 'Temperatur prediktion':
+    st.title('Vad skulle framtida temperaturer i Göteborg vara baserade på historiska temperaturtrender?')
+    st.write('När man ser på temperaturen över tid verkar det finnas en positiv trend.')
+    st.image('../plottar/pred_temp_snitt_overtid.png', width=700)
+    st.header('Metod')
+    st.write('En SARIMA-modell används med tidsseriedata när det finns säsongsbetonade trender i datan som måste beaktas.')
+    st.write("""Data split
+    Vi tittade på månatlig genomsnittstemperatur och bröt upp datan i 
+    tränings- 1944 - 2017
+    validerings-  2017 - 2022
+    testdata- 2022 - 2023""")
+    st.image('../plottar/pred_test_train_val_split.png', width=700)
+    st.write('Modellens prestanda')
+    st.image('../plottar/pred_temp_performance graphs.png', width= 700)
+    st.write('Prestandan för modellen mättes med ett RMSE på 1.9768 °C.')
+    st.write('Modelens predikterad värden vs test data')
+    st.image('../plottar/pred_temp_2023_perforamance.png', width = 700)    
+    st.write('Att extrapolera modellen över tid. Vad blir temperaturen om 20 år?')
+    st.image('../plottar/pred_temperature_till_2042.png', width=700)
 if nav == 'Slutsatser':
     st.title("Slutsatser")
-    st.write("""Det här projektet har varit.. """)
+    st.write("""- Temperaturfäändringen stämmer bra med vad man har hört om global uppvärming; varmare vintrar, svalare somrar.  
+             \n- Ingen påvisbar effekt av byggnation i Göteborg på vindriktingingar i Säve.
+             \n- Alla månader blir blötare, men det är lite mindre ökning på sommaren.
+             \n- Temperaturer över 0 grader verkar vara orelaterat till total nederbördsmängd.""")
+    st.subheader('Potentiell vidareutveckling')
+    st.write("""- Hur kan man förklara minskningen av vind i Säve?
+             \n - Korrelation mellan vind och nederbörd?
+             \n - Korrelation mellan vind och temperatur?
+             \n - Mer specifika frågor över bredare områden.""")
     ## Old version
 #     total_temps_plus_adjusted = ('../Olof_viz/medeltemperaturer.png')
 #     temp_diff = ('../Olof_viz/temp_diff_gbg_save.png')
