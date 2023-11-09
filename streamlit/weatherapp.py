@@ -254,8 +254,9 @@ if nav == 'Vind':
     vinddir_gbg_2 = "../plottar/windrose_all_winds_post_1992_gbg.png"
     vinddir_sav_1 = "../plottar/windrose_all_winds_pre_1990_save.png"
     vinddir_sav_2 = "../plottar/windrose_all_winds_post_1990_save.png"
-    vinddir_vinga_1 = "../plottar/windrose_all_winds_pre_1978_vinga.png"
-    vinddir_vinga_2 = "../plottar/windrose_all_winds_post_1978_vinga.png"
+    vinddir_vinga_1 = "../plottar/windrose_all_winds_pre_1990_vinga.png"
+    vinddir_vinga_2 = "../plottar/windrose_all_winds_post_1990_vinga.png"
+    
 
     if selected_location == "Säve":
         col1, col2 = st.columns(2)
@@ -274,17 +275,6 @@ if nav == 'Vind':
     st.write('- Cirklarna visar andelen av observationerna i procent.')
     st.write('- Färgerna visar vindhastigheten')
     st.write('- Automatiska proportioner')
-    #### Harder winds
-    st.title('Hårdare vindar')
-    hard_winds_over_time = ('../Olof_viz/hard_winds_over_time_comparison.png')
-    st.image(hard_winds_over_time)
-
-
-
-    hard_winds_over_time_save = "../plottar/hard_winds_save_barplot.png"
-    hard_winds_over_time_vinga = "../plottar/hard_winds_vinga_barplot.png"
-    st.image(hard_winds_over_time_save)
-    st.image(hard_winds_over_time_vinga)
     st.write('Har de kraftigare vindarna ändrat riktning?')
     hard_winds_save_pre_1978 = ('../plottar/windrose_hard_winds_pre_1990_save.png')
     hard_winds_save_post_1978 = ('../plottar/windrose_hard_winds_post_1990_save.png')
@@ -293,9 +283,25 @@ if nav == 'Vind':
         st.image(hard_winds_save_pre_1978)
     with col2:
         st.image(hard_winds_save_post_1978)
+
+
+    #### Harder winds
+    st.subheader('Hårdare vindar')
+    st.write('Beaufort-skalan: 13.9m/s är "hård vind"')
+    hard_winds_over_time = ('../Olof_viz/hard_winds_over_time_comparison.png')
+    st.image(hard_winds_over_time)
+
+
+
+    hard_winds_over_time_save = "../plottar/hard_winds_save_barplot.png"
+    hard_winds_over_time_vinga = "../plottar/hard_winds_vinga_barplot.png"
+    '\n'
+    st.write('1978 är halvvägs mellan början på tillförlitlig data (1950) och sista mätningen i Säve (2006)')
+    st.image(hard_winds_over_time_save, caption='Drastisk minskning i andra halvan av datasetet.')
+    st.image(hard_winds_over_time_vinga, 'Ganska stor ökning, förmodligen relaterat till det högre antalet mätningar per år.')
+
     st.write('Slutsats: Större andel kraftiga vindar från söder, men överlag lägre hastigheter.')
     st.write('Ingen större skilnad i vindar från Göteborgs-hållet.')
-
 
     ## Old verison
     # st.title('Överblick över vind-data ')
