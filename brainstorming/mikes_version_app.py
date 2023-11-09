@@ -181,7 +181,7 @@ if nav == 'Vind':
         """)
 
     st.write("""För att undersöka relationen använde vi en lineär OLS regression ekvation användes:""")
-    st.write("""y = a * X + c """)
+    st.write("""y = a * X + b """)
     
     st.image('../plottar/reg_results_sav_bygg_linear.png', width = 700)
 
@@ -244,7 +244,7 @@ if nav == 'Relationen mellan nederbörd & temperatur':
     st.write("Scatterplottan för månatlig genomsnittstemperatur gentemot total månatlig nederbörd visar ett möjligt heteroskedastiskt förhållande.  När den genomsnittliga temperaturen stiger, ökar omfånget av total månatlig nederbörd. ")
     st.header("Regression")
     st.write("En OLS-linjär regression används för att uttrycka förhållandet mellan genomsnittlig månadstemperatur och månatlig total nederbörd.")
-    st.write("Ekvationen är: y = a + b * x + C")
+    st.write("Ekvationen är: Y = a * X + b")
     st.image("../plottar/reg_results_ned_temp.png", width = 700)
     st.image("../plottar/scatter_trendline_temp_ned.png", width=700)
     st.write("""
